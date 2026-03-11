@@ -29,7 +29,9 @@ body{margin:0;background:#dfe5ef;font-family:Arial, Helvetica, sans-serif;displa
 .footer{height:66px;border-top:1px solid #d9deea;background:#fff;position:relative;flex:0 0 66px}
 .btn{position:absolute;bottom:10px;width:174px;height:46px;border:0;color:#fff;font-size:18px;font-weight:700;cursor:pointer;background:linear-gradient(180deg,#5177d7 0%, #3d64c7 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,0.2)}.btn.left{left:0}.btn.right{right:0}
 .status{position:absolute;right:194px;bottom:21px;color:#616b7d;font-weight:700;font-size:14px;transition:color .2s ease}.status.is-low{color:#616b7d}.status.is-good{color:#2d8a4b}.status.is-high{color:#c0392b}
-.floating-tools{position:absolute;left:50%;transform:translateX(-50%);bottom:11px;width:166px;height:30px;background:rgba(19,23,31,.95);border-radius:8px;display:flex;align-items:center;justify-content:center;gap:18px;color:#f4f6fa;font-size:16px}
+
+/* Simplified floating tools - Dark mode only */
+.floating-tools{position:absolute;left:50%;transform:translateX(-50%);bottom:11px;width:60px;height:30px;background:rgba(19,23,31,.95);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#f4f6fa;font-size:16px}
 .tool-icon{display:inline-flex;align-items:center;justify-content:center;min-width:16px;cursor:pointer;user-select:none}
 
 .prompt-overlay{position:absolute;inset:56px 0 0 0;background:#fff;display:none;z-index:8}.prompt-overlay.open{display:block}
@@ -39,18 +41,19 @@ body{margin:0;background:#dfe5ef;font-family:Arial, Helvetica, sans-serif;displa
 .audio-dot{position:absolute;left:78px;top:10px;width:10px;height:10px;border-radius:50%;background:#f3f6ff}
 .audio-time{position:absolute;right:12px;top:7px;color:#f0f3fb;font-size:13px;font-weight:700}
 .audio-close{position:absolute;right:10px;top:-29px;width:28px;height:28px;color:#dfe8ff;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;cursor:pointer}
-.prompt-body{height:calc(100% - 90px);padding:16px 0 0;display:grid;grid-template-columns:52px 1fr 372px;gap:18px}
-.prompt-band{margin-left:18px;background:#f3eadc;border-radius:2px}
-.prompt-left{padding:18px 0 18px 0;color:#4a4f59;overflow:auto}.prompt-left::-webkit-scrollbar{width:10px}.prompt-left::-webkit-scrollbar-track{background:#f4f5f8}.prompt-left::-webkit-scrollbar-thumb{background:#bec7d5;border-radius:8px;border:2px solid #f4f5f8}
-.prompt-title{font-size:22px;font-weight:700;color:#3b4051;text-align:center;margin:10px 0 20px}
-.prompt-text{font-size:15px;line-height:1.4;margin-bottom:12px;max-width:360px}.prompt-section{max-width:360px;margin-top:10px}.prompt-section-title{font-size:15px;font-weight:700;margin:10px 0 6px}.prompt-list{margin:0;padding-left:20px;font-size:15px;line-height:1.38}
-.prompt-right{padding:8px 0 14px 0}
 
-/* Static Mosaic Image Styling */
-.mosaic-container{width:100%;height:460px;background:#f7f9fb;border:1px solid #e1e5eb;border-radius:6px;overflow:hidden;position:relative}
-.mosaic-img{width:100%;height:100%;object-fit:cover;display:block}
+.prompt-body{height:calc(100% - 90px);padding:20px 24px 0;display:grid;grid-template-columns:46px 1fr 400px;gap:24px;overflow:hidden}
+.prompt-band{background:#f3eadc;border-radius:4px}
+.prompt-left{padding:0 10px 18px 0;color:#4a4f59;overflow-y:auto}.prompt-left::-webkit-scrollbar{width:8px}.prompt-left::-webkit-scrollbar-track{background:#f4f5f8}.prompt-left::-webkit-scrollbar-thumb{background:#bec7d5;border-radius:8px}
+.prompt-title{font-size:24px;font-weight:800;color:#3b4051;margin:4px 0 16px}
+.prompt-text{font-size:16px;line-height:1.5;margin-bottom:14px;color:#4a5568}.prompt-section{margin-top:16px}.prompt-section-title{font-size:16px;font-weight:700;margin-bottom:8px;color:#35425d}.prompt-list{margin:0;padding-left:18px;font-size:15px;line-height:1.6}
 
-.prompt-nav-bar{height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;border-top:1px solid #eee}
+/* Refined Image Placement Logic */
+.prompt-right{padding-bottom:18px;display:flex;align-items:flex-start;justify-content:center}
+.mosaic-container{width:100%;max-width:400px;background:#f7f9fb;border:1px solid #e1e5eb;border-radius:10px;overflow:hidden;box-shadow: 0 4px 12px rgba(0,0,0,0.06);display:flex}
+.mosaic-img{width:100%;height:auto;object-fit:contain;display:block}
+
+.prompt-nav-bar{height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;border-top:1px solid #eee}
 .change-prompt-btn{cursor:pointer;background:#f0f2f5;padding:8px 16px;border-radius:6px;font-size:14px;font-weight:700;color:#3f67c8;border:1px solid #d5dcea}
 
 /* Polish Overlay */
@@ -81,15 +84,11 @@ body{margin:0;background:#dfe5ef;font-family:Arial, Helvetica, sans-serif;displa
 .analysis-text .hl-adjective{background:#ff96cc !important}
 .analysis-text .hl-stop{background:#d7d7d7}
 
-/* Either/Or Toggle Logic: Priority given to colorful categories */
-.analysis-text.hide-stop .hl-stop:not(.hl-starter):not(.hl-auxiliary):not(.hl-filter):not(.hl-adverb):not(.hl-basic):not(.hl-repeat):not(.hl-adjective) { 
-  background: transparent !important; 
-  padding: 0 !important; 
-}
+/* Highlighting Priority */
+.analysis-text.hide-stop .hl-stop:not(.hl-starter):not(.hl-auxiliary):not(.hl-filter):not(.hl-adverb):not(.hl-basic):not(.hl-repeat):not(.hl-adjective) { background: transparent !important; padding: 0 !important; }
 .analysis-text.hide-stop .hl-stop { background: transparent; }
 .analysis-text.stop-only .hl:not(.hl-stop) { background: transparent !important; padding: 0 !important; }
 
-/* Force show categories when checked */
 .analysis-text.hide-starter .hl-starter, 
 .analysis-text.hide-auxiliary .hl-auxiliary, 
 .analysis-text.hide-filter .hl-filter, 
@@ -98,7 +97,7 @@ body{margin:0;background:#dfe5ef;font-family:Arial, Helvetica, sans-serif;displa
 .analysis-text.hide-repeat .hl-repeat, 
 .analysis-text.hide-adjective .hl-adjective { background: transparent !important; padding: 0 !important; }
 
-.start-bar{width:220px;height:58px;background:linear-gradient(180deg,#567cdb 0%, #3e66c9 100%);color:#fff;display:flex;align-items:center;justify-content:center;gap:16px;font-size:18px;font-weight:700;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,0.18)}
+.start-bar{width:220px;height:52px;background:linear-gradient(180deg,#567cdb 0%, #3e66c9 100%);color:#fff;display:flex;align-items:center;justify-content:center;gap:16px;font-size:18px;font-weight:700;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,0.18);border-radius:6px}
 .hidden{visibility:hidden}
 .dark-mode .content,.dark-mode .editor,.dark-mode .footer,.dark-mode .app{background:#2f3c4f}
 .dark-mode .instruction,.dark-mode .prompt-left,.dark-mode .finish-copy,.dark-mode .finish-meta{color:#e6edf7}
@@ -110,7 +109,7 @@ body{margin:0;background:#dfe5ef;font-family:Arial, Helvetica, sans-serif;displa
 .dark-mode .prompt-title,.dark-mode .prompt-text,.dark-mode .prompt-list,.dark-mode .prompt-section-title,.dark-mode .task-title,.dark-mode .finish-title,.dark-mode .status,.dark-mode .analysis-row,.dark-mode .analysis-count,.dark-mode .analysis-summary,.dark-mode .analysis-text{color:#ffffff}
 
 @media (max-width:1100px){.app{width:100vw;height:100vh;max-width:none;max-height:none;min-width:0;min-height:0;border-radius:0}.content{padding:10px 10px 6px}.instruction,.editor{width:96%}.editor{height:46vh}.prompt-body{grid-template-columns:36px 1fr 320px;gap:12px}.prompt-text,.prompt-section,.prompt-list{max-width:none}}
-@media (max-width:820px){body{align-items:stretch;justify-content:stretch}.app{border-radius:0}.header{height:54px;flex-basis:54px}.header-left,.header-right{height:54px;width:26%}.task-title{font-size:18px}.timer{left:12px;top:9px;font-size:16px}.pill.one{left:86px;width:42px;height:38px}.instruction{font-size:15px;line-height:1.35}.editor{height:52vh;margin-top:8px}.toolbar{gap:10px;font-size:14px;padding:0 8px}.text-area{font-size:16px;line-height:1.32}.btn{width:138px;font-size:16px;height:42px}.status{right:150px;font-size:13px;bottom:20px}.floating-tools{width:150px;gap:16px}.prompt-overlay{inset:54px 0 0 0}.prompt-body{grid-template-columns:28px 1fr;grid-template-rows:auto auto;gap:12px;padding:12px 12px 12px;height:calc(100% - 110px)}.prompt-band{margin-left:0;grid-row:1 / span 2}.prompt-left{padding:8px 0 0 0;max-height:38vh}.prompt-right{padding:0 0 10px 0}.mosaic-container{height:300px}.prompt-title{font-size:20px;margin:4px 0 14px}.prompt-text,.prompt-section-title,.prompt-list{font-size:14px}.start-bar{width:50%}.finish-inner{grid-template-columns:1fr;padding:14px}.finish-title{font-size:28px}.finish-copy{font-size:16px}.finish-actions{flex-direction:column;width:100%;max-width:320px}.finish-btn{width:100%}}
+@media (max-width:820px){body{align-items:stretch;justify-content:stretch}.app{border-radius:0}.header{height:54px;flex-basis:54px}.header-left,.header-right{height:54px;width:26%}.task-title{font-size:18px}.timer{left:12px;top:9px;font-size:16px}.pill.one{left:86px;width:42px;height:38px}.instruction{font-size:15px;line-height:1.35}.editor{height:52vh;margin-top:8px}.toolbar{gap:10px;font-size:14px;padding:0 8px}.text-area{font-size:16px;line-height:1.32}.btn{width:138px;font-size:16px;height:42px}.status{right:150px;font-size:13px;bottom:20px}.floating-tools{width:60px;gap:16px}.prompt-overlay{inset:54px 0 0 0}.prompt-body{grid-template-columns:28px 1fr;grid-template-rows:auto auto;gap:12px;padding:12px 12px 12px;height:calc(100% - 110px)}.prompt-band{margin-left:0;grid-row:1 / span 2}.prompt-left{padding:8px 0 0 0;max-height:38vh}.prompt-right{padding:0 0 10px 0}.prompt-title{font-size:20px;margin:4px 0 14px}.prompt-text,.prompt-section-title,.prompt-list{font-size:14px}.start-bar{width:50%}.finish-inner{grid-template-columns:1fr;padding:14px}.finish-title{font-size:28px}.finish-copy{font-size:16px}.finish-actions{flex-direction:column;width:100%;max-width:320px}.finish-btn{width:100%}}
 </style>
 </head>
 <body>
@@ -139,7 +138,9 @@ body{margin:0;background:#dfe5ef;font-family:Arial, Helvetica, sans-serif;displa
 
     <div class="footer">
       <button class="btn left" id="promptBtn">‹&nbsp;&nbsp;Prompt</button>
-      <div class="floating-tools"><span class="tool-icon">◫</span><span class="tool-icon" id="darkToggle">◐</span><span class="tool-icon">/</span><span class="tool-icon">U</span></div>
+      <div class="floating-tools">
+        <span class="tool-icon" id="darkToggle">◐</span>
+      </div>
       <div class="status" id="wordCount">0 words</div>
       <button class="btn right" id="finishBtn">Finish&nbsp;&nbsp;›</button>
     </div>
@@ -199,7 +200,7 @@ body{margin:0;background:#dfe5ef;font-family:Arial, Helvetica, sans-serif;displa
           </div>
           <div class="finish-actions">
             <button class="finish-btn-alt" id="copyTextBtn">Copy Text</button>
-            <button class="finish-btn" id="exitFinishBtn">Finish & Exit</button>
+            <button class="finish-btn" id="exitFinishBtn">Get My Report</button>
           </div>
         </div>
         <div class="finish-main">
@@ -351,7 +352,6 @@ function loadPrompt(idx) {
   const list = document.getElementById('pThinkList');
   list.innerHTML = p.thinkAbout.map(item => `<li>${item}</li>`).join('');
   
-  // Set the image from the local GitHub file
   mosaicImg.src = p.img;
 }
 
