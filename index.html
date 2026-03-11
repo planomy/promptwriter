@@ -73,23 +73,27 @@ body{margin:0;background:#dfe5ef;font-family:Arial, Helvetica, sans-serif;displa
 .analysis-text{font-size:17px;line-height:1.75;color:#3f4653;white-space:pre-wrap;outline:none}
 .analysis-text .hl{padding:1px 2px;border-radius:3px}
 
-/* Highlighting Priority Fix */
-.analysis-text .hl-starter{background:#9bc9ff !important} 
+/* Precise Color Highlighting with Priority CSS */
+.analysis-text .hl-starter{background:#9bc9ff !important} /* Clear Blue */
 .analysis-text .hl-auxiliary{background:#ffb7b7 !important}
 .analysis-text .hl-filter{background:#d6b8ff !important}
 .analysis-text .hl-adverb{background:#fff2a6 !important}
 .analysis-text .hl-basic{background:#b9efb7 !important}
 .analysis-text .hl-repeat{background:#ffd1a8 !important}
-.analysis-text .hl-adjective{background:#ff96cc !important}
+.analysis-text .hl-adjective{background:#ff96cc !important} /* Vibrant Red/Pink */
 .analysis-text .hl-stop{background:#d7d7d7}
 
+/* Category mode: Adjective and Starter priority */
 .analysis-text.hide-stop .hl-stop:not(.hl-starter):not(.hl-auxiliary):not(.hl-filter):not(.hl-adverb):not(.hl-basic):not(.hl-repeat):not(.hl-adjective) { 
   background: transparent !important; 
   padding: 0 !important; 
 }
 .analysis-text.hide-stop .hl-stop { background: transparent; }
+
+/* Stop Word Mode: Hide all colorful categories */
 .analysis-text.stop-only .hl:not(.hl-stop) { background: transparent !important; padding: 0 !important; }
 
+/* Force show categories when checked */
 .analysis-text.hide-starter .hl-starter, 
 .analysis-text.hide-auxiliary .hl-auxiliary, 
 .analysis-text.hide-filter .hl-filter, 
@@ -215,7 +219,7 @@ body{margin:0;background:#dfe5ef;font-family:Arial, Helvetica, sans-serif;displa
   </div>
 
 <script>
-const apiKey = ""; // Provided by environment
+const apiKey = ""; 
 
 const PROMPTS = [
   {
@@ -249,6 +253,54 @@ const PROMPTS = [
     line3: "Your bridge could be made of rope, stone, or even light.",
     thinkAbout: ["the height and the view below", "the obstacles faced while crossing", "reaching the destination"],
     aiPrompt: "A high-quality 2x3 mosaic collage of 6 photos: a rickety rope bridge over a jungle chasm, a massive futuristic steel bridge in a neon city, a bridge made of solid rainbows, an old mossy stone bridge over a brook, a drawbridge lifting at a castle, and a glass bridge high above the clouds. Epic scale, breathtaking vistas."
+  },
+  {
+    title: "The Key",
+    line1: "Write a story about a key that doesn't fit any normal lock.",
+    line2: "Maybe it unlocks a memory, a hidden world, or a giant machine.",
+    line3: "Think about who gave the key to the character and why.",
+    thinkAbout: ["the intricate design of the key", "the search for the right lock", "the consequences of opening it"],
+    aiPrompt: "A high-quality 2x3 mosaic collage of 6 photos: a rusty iron key, a glowing digital key card, a giant golden key, an ornate music box key, a key made of ice, and a key shaped like a dragon. Artistic focus, professional lighting."
+  },
+  {
+    title: "The Storm",
+    line1: "Write a narrative set during a storm that changes the environment.",
+    line2: "It could be a literal weather storm, or a 'storm' of events.",
+    line3: "Describe the power of nature and how the characters react to it.",
+    thinkAbout: ["the sounds and smells of the storm", "seeking shelter or being caught outside", "the calm that follows"],
+    aiPrompt: "A high-quality 2x3 mosaic collage of 6 photos: a lightning bolt hitting a city skyscraper, a swirling green tornado, a massive ocean wave, a quiet forest after a blizzard, dark purple clouds over a farmhouse, and a rainbow after the rain. Dramatic lighting, high contrast."
+  },
+  {
+    title: "Lost and Found",
+    line1: "Write a story about something precious that was lost and then found in an unlikely place.",
+    line2: "Maybe it's a family heirloom, a map, or a mysterious object.",
+    line3: "Explore the journey to recover the item.",
+    thinkAbout: ["why the object is so important", "the clues that lead to it", "the feeling of finding it again"],
+    aiPrompt: "A high-quality 2x3 mosaic collage of 6 photos: a gold locket in the mud, a dusty chest in an attic, a message in a bottle on a reef, a ring inside a bird's nest, a map tucked into an old book, and a hidden treasure chest in a cave."
+  },
+  {
+    title: "The Invention",
+    line1: "Write a story about an invention that works in a very surprising way.",
+    line2: "Your character might be a brilliant scientist or a lucky amateur.",
+    line3: "Describe the machine and the day it was first tested.",
+    thinkAbout: ["the workshop filled with tools", "the moment of activation", "the unintended side effects"],
+    aiPrompt: "A high-quality 2x3 mosaic collage of 6 photos: a steampunk machine with gears, a sleek white laboratory, sparks flying from a circuit, a robot arm reaching for a tool, blueprints covered in coffee stains, and a glowing energy core."
+  },
+  {
+    title: "The New Neighbor",
+    line1: "Write a story about someone strange or interesting moving in next door.",
+    line2: "They might have unusual habits, strange luggage, or a secret visitor.",
+    line3: "Focus on the curiosity and observations of your character.",
+    thinkAbout: ["the moving truck arriving at night", "glimpses through the curtains", "the first interaction"],
+    aiPrompt: "A high-quality 2x3 mosaic collage of 6 photos: a moving truck on a quiet street, a pile of trunks with exotic labels, a shadow in a window, a welcome mat with a weird symbol, a pair of binoculars on a desk, and a strange light in a garden."
+  },
+  {
+    title: "The Time Capsule",
+    line1: "Write a story about digging up a time capsule from fifty years ago.",
+    line2: "What is inside, and how does it relate to the present day?",
+    line3: "Consider if the items inside are a warning or a gift.",
+    thinkAbout: ["the rusty metal box buried deep", "the smell of old paper and history", "the person who originally buried it"],
+    aiPrompt: "A high-quality 2x3 mosaic collage of 6 photos: a metal box being unearthed, a stack of sepia-toned photos, a vintage toy car, a handwritten letter on yellowed paper, an old newspaper with a big headline, and a small key at the bottom of a box."
   }
 ];
 
@@ -294,32 +346,45 @@ const ADJECTIVE_WHITELIST=new Set(['big','small','little','happy','sad','angry',
 const ADJECTIVE_SUFFIXES=['ous','ful','able','ible','al','ive','less','ish','ic','ary','ory','ent','ant','some','y']
 const CATEGORY_META={starter:{label:'Sentence starts',colour:'#9bc9ff'},auxiliary:{label:'Auxiliary verbs',colour:'#ffb7b7'},filter:{label:'Filter words',colour:'#d6b8ff'},adverb:{label:'Adverbs',colour:'#fff2a6'},basic:{label:'Basic words',colour:'#b9efb7'},repeat:{label:'Repeated key words',colour:'#ffd1a8'},adjective:{label:'Adjectives',colour:'#ff96cc'}}
 
-async function generateMosaic(promptText) {
+// Robust exponential backoff for image generation
+async function generateMosaicWithRetry(promptText, retries = 5) {
+    for (let i = 0; i < retries; i++) {
+        try {
+            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict?key=${apiKey}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    instances: [{ prompt: promptText }],
+                    parameters: { sampleCount: 1 }
+                })
+            });
+
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            
+            const result = await response.json();
+            const bytesBase64Encoded = result.predictions[0].bytesBase64Encoded;
+            return `data:image/png;base64,${bytesBase64Encoded}`;
+        } catch (error) {
+            if (i === retries - 1) throw error;
+            await new Promise(resolve => setTimeout(resolve, Math.pow(2, i) * 1000));
+        }
+    }
+}
+
+async function handleMosaicGeneration(promptText) {
   mosaicImg.classList.remove('loaded');
   mosaicLoader.style.display = 'flex';
+  mosaicLoader.innerHTML = '<div class="spinner"></div>Generating visual inspiration...';
   
   try {
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict?key=${apiKey}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        instances: [{ prompt: promptText }],
-        parameters: { sampleCount: 1 }
-      })
-    });
-
-    if (!response.ok) throw new Error('API request failed');
-    
-    const result = await response.json();
-    const bytesBase64Encoded = result.predictions[0].bytesBase64Encoded;
-    mosaicImg.src = `data:image/png;base64,${bytesBase64Encoded}`;
+    const imageUrl = await generateMosaicWithRetry(promptText);
+    mosaicImg.src = imageUrl;
     
     mosaicImg.onload = () => {
       mosaicImg.classList.add('loaded');
       mosaicLoader.style.display = 'none';
     };
   } catch (error) {
-    console.error('Image generation error:', error);
     mosaicLoader.innerHTML = '<div style="color:#cf3d32">⚠ Inspiration visual failed to load.</div>';
   }
 }
@@ -341,7 +406,7 @@ function loadPrompt(idx) {
   const list = document.getElementById('pThinkList');
   list.innerHTML = p.thinkAbout.map(item => `<li>${item}</li>`).join('');
   
-  generateMosaic(p.aiPrompt);
+  handleMosaicGeneration(p.aiPrompt);
 }
 
 function countWords(text){const cleaned=text.replace(/\s+/g,' ').trim();return cleaned?cleaned.split(' ').length:0}
@@ -484,12 +549,14 @@ analysisGrid.addEventListener('change',e=>{
 toggleStopBtn.onclick=()=>{
   stopMode = !stopMode;
   if(stopMode) {
+      // STOP WORD MODE: Only Greys
       analysisText.classList.add('stop-only');
       analysisText.classList.remove('hide-stop');
       Object.keys(CATEGORY_META).forEach(key => analysisText.classList.add('hide-'+key));
       analysisGrid.querySelectorAll('input[type="checkbox"]').forEach(cb=>cb.checked=false);
       toggleStopBtn.innerText = "Restore Category Highlights";
   } else {
+      // CATEGORY HIGHLIGHT MODE: Colorful
       analysisText.classList.remove('stop-only');
       analysisText.classList.add('hide-stop');
       Object.keys(CATEGORY_META).forEach(key => analysisText.classList.remove('hide-'+key));
