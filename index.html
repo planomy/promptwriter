@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<title>NAPLAN Writing Tool - Writing Dojo</title>
+<title>Prompt Writer - Writing Dojo</title>
 <style>
 *{box-sizing:border-box}
 html,body{height:100%}
 body{margin:0;background:#dfe5ef;font-family:Arial, Helvetica, sans-serif;display:flex;align-items:center;justify-content:center}
 :root{--nap-blue:#3f67c8;--nap-blue-dark:#3158b5;--nap-blue-light:#5579d3}
 
-/* Modern App Container - No frame, soft deep shadow */
+/* Modern App Container */
 .app{width:90vw;height:90vh;max-width:1180px;max-height:760px;min-width:980px;min-height:620px;background:#ffffff;border:1px solid #d5dcea;border-radius:12px;overflow:hidden;position:relative;display:flex;flex-direction:column;box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0,0,0,0.05)}
 
 .header{height:56px;position:relative;background:#fff;border-bottom:1px solid #d6deed;flex:0 0 56px}
@@ -27,12 +27,18 @@ body{margin:0;background:#dfe5ef;font-family:Arial, Helvetica, sans-serif;displa
 .text-area{flex:1;padding:10px 12px;font-size:15px;line-height:1.26;color:#62666d;outline:none;overflow:auto;white-space:pre-wrap; -webkit-font-smoothing: antialiased;}.text-area::-webkit-scrollbar{width:12px}.text-area::-webkit-scrollbar-track{background:#f0f2f6}.text-area::-webkit-scrollbar-thumb{background:#c0c7d3;border-radius:8px;border:2px solid #f0f2f6}
 
 .footer{height:66px;border-top:1px solid #d9deea;background:#fff;position:relative;flex:0 0 66px}
-.btn{position:absolute;bottom:10px;width:174px;height:46px;border:0;color:#fff;font-size:18px;font-weight:700;cursor:pointer;background:linear-gradient(180deg,#5177d7 0%, #3d64c7 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,0.2)}.btn.left{left:0}.btn.right{right:0}
+.btn{position:absolute;bottom:10px;width:174px;height:46px;border:0;color:#fff;font-size:18px;font-weight:700;cursor:pointer;background:linear-gradient(180deg,#5177d7 0%, #3d64c7 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,0.2); border-radius:4px;}.btn.left{left:0}.btn.right{right:0}
 .status{position:absolute;right:194px;bottom:21px;color:#616b7d;font-weight:700;font-size:14px;transition:color .2s ease}.status.is-low{color:#616b7d}.status.is-good{color:#2d8a4b}.status.is-high{color:#c0392b}
 
-/* Simplified floating tools - Dark mode only */
 .floating-tools{position:absolute;left:50%;transform:translateX(-50%);bottom:11px;width:60px;height:30px;background:rgba(19,23,31,.95);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#f4f6fa;font-size:16px}
 .tool-icon{display:inline-flex;align-items:center;justify-content:center;min-width:16px;cursor:pointer;user-select:none}
+
+/* Registration Screen Overlay */
+.setup-overlay{position:absolute;inset:0;background:#fff;z-index:20;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:40px}
+.setup-card{width:100%;max-width:440px;padding:32px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05)}
+.setup-logo{font-size:32px;font-weight:800;color:var(--nap-blue);margin-bottom:12px;letter-spacing:-0.02em}
+.setup-title{font-size:18px;font-weight:700;color:#334155;margin-bottom:24px}
+.begin-btn{width:220px;height:52px;background:linear-gradient(180deg,#567cdb 0%, #3e66c9 100%);color:#fff;font-size:18px;font-weight:700;border:0;border-radius:8px;cursor:pointer;margin-top:20px;box-shadow: 0 4px 12px rgba(62,102,201,0.25);transition:transform 0.1s;}.begin-btn:active{transform:scale(0.98)}
 
 .prompt-overlay{position:absolute;inset:56px 0 0 0;background:#fff;display:none;z-index:8}.prompt-overlay.open{display:block}
 .audio-strip{height:34px;background:linear-gradient(180deg,#4671d1 0%, #3560c1 100%);border-bottom:1px solid #6e89cb;position:relative}
@@ -48,13 +54,19 @@ body{margin:0;background:#dfe5ef;font-family:Arial, Helvetica, sans-serif;displa
 .prompt-title{font-size:24px;font-weight:800;color:#3b4051;margin:4px 0 16px}
 .prompt-text{font-size:16px;line-height:1.5;margin-bottom:14px;color:#4a5568}.prompt-section{margin-top:16px}.prompt-section-title{font-size:16px;font-weight:700;margin-bottom:8px;color:#35425d}.prompt-list{margin:0;padding-left:18px;font-size:15px;line-height:1.6}
 
-/* Refined Image Placement Logic */
+/* Entry Fields in Registration Card */
+.entry-field{display:flex;flex-direction:column;gap:8px;text-align:left;margin-bottom:16px}
+.entry-label{font-size:12px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.04em}
+.entry-input, .entry-select{height:44px;padding:0 12px;border:1px solid #cbd5e1;border-radius:8px;font-size:15px;color:#1e293b;outline:none;background:#fff}
+.entry-input:focus, .entry-select:focus{border-color:var(--nap-blue);box-shadow:0 0 0 3px rgba(63,103,200,0.1)}
+
 .prompt-right{padding-bottom:18px;display:flex;align-items:flex-start;justify-content:center}
 .mosaic-container{width:100%;max-width:400px;background:#f7f9fb;border:1px solid #e1e5eb;border-radius:10px;overflow:hidden;box-shadow: 0 4px 12px rgba(0,0,0,0.06);display:flex}
 .mosaic-img{width:100%;height:auto;object-fit:contain;display:block}
 
 .prompt-nav-bar{height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;border-top:1px solid #eee}
 .change-prompt-btn{cursor:pointer;background:#f0f2f5;padding:8px 16px;border-radius:6px;font-size:14px;font-weight:700;color:#3f67c8;border:1px solid #d5dcea}
+.start-bar{width:200px;height:52px;background:linear-gradient(180deg,#567cdb 0%, #3e66c9 100%);color:#fff;display:flex;align-items:center;justify-content:center;gap:12px;font-size:18px;font-weight:700;cursor:pointer;border-radius:6px}
 
 /* Polish Overlay */
 .finish-overlay{position:absolute;inset:56px 0 0 0;background:#fff;display:none;z-index:9}.finish-overlay.open{display:block}
@@ -84,25 +96,22 @@ body{margin:0;background:#dfe5ef;font-family:Arial, Helvetica, sans-serif;displa
 .analysis-text .hl-adjective{background:#ff96cc !important}
 .analysis-text .hl-stop{background:#d7d7d7}
 
-/* Highlighting Priority */
+/* Visibility Control */
 .analysis-text.hide-stop .hl-stop:not(.hl-starter):not(.hl-auxiliary):not(.hl-filter):not(.hl-adverb):not(.hl-basic):not(.hl-repeat):not(.hl-adjective) { background: transparent !important; padding: 0 !important; }
 .analysis-text.hide-stop .hl-stop { background: transparent; }
 .analysis-text.stop-only .hl:not(.hl-stop) { background: transparent !important; padding: 0 !important; }
 
-.analysis-text.hide-starter .hl-starter, 
-.analysis-text.hide-auxiliary .hl-auxiliary, 
-.analysis-text.hide-filter .hl-filter, 
-.analysis-text.hide-adverb .hl-adverb, 
-.analysis-text.hide-basic .hl-basic, 
-.analysis-text.hide-repeat .hl-repeat, 
+.analysis-text.hide-starter .hl-starter, .analysis-text.hide-auxiliary .hl-auxiliary, 
+.analysis-text.hide-filter .hl-filter, .analysis-text.hide-adverb .hl-adverb, 
+.analysis-text.hide-basic .hl-basic, .analysis-text.hide-repeat .hl-repeat, 
 .analysis-text.hide-adjective .hl-adjective { background: transparent !important; padding: 0 !important; }
 
-.start-bar{width:220px;height:52px;background:linear-gradient(180deg,#567cdb 0%, #3e66c9 100%);color:#fff;display:flex;align-items:center;justify-content:center;gap:16px;font-size:18px;font-weight:700;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,0.18);border-radius:6px}
 .hidden{visibility:hidden}
-.dark-mode .content,.dark-mode .editor,.dark-mode .footer,.dark-mode .app{background:#2f3c4f}
-.dark-mode .instruction,.dark-mode .prompt-left,.dark-mode .finish-copy,.dark-mode .finish-meta{color:#e6edf7}
-.dark-mode .text-area{background:#2f3c4f;color:#ffffff}
-.dark-mode .toolbar{background:#34465d;color:#ffffff;border-bottom:1px solid #445a77}
+.dark-mode .content,.dark-mode .editor,.dark-mode .footer,.dark-mode .app, .dark-mode .setup-overlay{background:#2f3c4f}
+.dark-mode .setup-card{background:#34465d; border-color:#445a77}
+.dark-mode .setup-title, .dark-mode .entry-label, .dark-mode .instruction, .dark-mode .prompt-left, .dark-mode .finish-copy, .dark-mode .finish-meta{color:#e6edf7}
+.dark-mode .text-area, .dark-mode .entry-input, .dark-mode .entry-select{background:#2d3748; color:#ffffff; border-color:#445a77}
+.dark-mode .toolbar, .dark-mode .header{background:#34465d; color:#ffffff; border-bottom:1px solid #445a77}
 .dark-mode .editor,.dark-mode .finish-sidebar,.dark-mode .finish-main{border:1px solid #445a77}
 .dark-mode .footer{border-top:1px solid #445a77}
 .dark-mode .prompt-overlay,.dark-mode .finish-overlay,.dark-mode .finish-sidebar,.dark-mode .finish-main{background:#34465d}
@@ -114,12 +123,46 @@ body{margin:0;background:#dfe5ef;font-family:Arial, Helvetica, sans-serif;displa
 </head>
 <body>
   <div class="app">
+    <!-- First Screen: Setup -->
+    <div class="setup-overlay" id="setupOverlay">
+      <div class="setup-card">
+        <div class="setup-logo">Prompt Writer</div>
+        <div class="setup-title">Candidate Registration</div>
+        
+        <div class="entry-field">
+          <label class="entry-label">Student Name</label>
+          <input type="text" id="studentName" class="entry-input" placeholder="e.g. Liam Smith">
+        </div>
+        
+        <div class="entry-field">
+          <label class="entry-label">Year Level</label>
+          <select id="yearLevel" class="entry-select">
+            <option value="">Select Level</option>
+            <option value="1">Year 1</option>
+            <option value="2">Year 2</option>
+            <option value="3">Year 3</option>
+            <option value="4">Year 4</option>
+            <option value="5">Year 5</option>
+            <option value="6">Year 6</option>
+            <option value="7">Year 7</option>
+            <option value="8">Year 8</option>
+            <option value="9">Year 9</option>
+            <option value="10">Year 10</option>
+            <option value="11">Year 11</option>
+            <option value="12">Year 12</option>
+          </select>
+        </div>
+
+        <button class="begin-btn" id="beginTestBtn">BEGIN TEST</button>
+      </div>
+    </div>
+
     <div class="header">
       <div class="header-left"></div>
       <div class="header-right"></div>
-      <div class="timer" id="timer">40:00<small>Hours&nbsp;&nbsp;&nbsp;Mins</small></div>
+      <div class="timer" id="timer">42:00<small>Hours&nbsp;&nbsp;&nbsp;Mins</small></div>
       <div class="pill one" id="hideTimeBtn">Hide<br>time</div>
-      <div class="task-title">Task 1 of 1</div>
+      <div class="task-title" id="mainHeaderTitle">Narrative Writing Sim</div>
     </div>
 
     <div class="content">
@@ -145,7 +188,7 @@ body{margin:0;background:#dfe5ef;font-family:Arial, Helvetica, sans-serif;displa
       <button class="btn right" id="finishBtn">Finish&nbsp;&nbsp;›</button>
     </div>
 
-    <div class="prompt-overlay open" id="promptOverlay">
+    <div class="prompt-overlay" id="promptOverlay">
       <div class="audio-strip">
         <div class="audio-close" id="closePromptBtn">✕</div>
         <div class="audio-icons"><span>▶</span><span>🔊</span></div>
@@ -164,6 +207,7 @@ body{margin:0;background:#dfe5ef;font-family:Arial, Helvetica, sans-serif;displa
             <div class="prompt-section-title">Think about:</div>
             <ul class="prompt-list" id="pThinkList"></ul>
           </div>
+          
           <div class="prompt-section">
             <div class="prompt-section-title">Remember to:</div>
             <ul class="prompt-list">
@@ -212,86 +256,16 @@ body{margin:0;background:#dfe5ef;font-family:Arial, Helvetica, sans-serif;displa
 
 <script>
 const PROMPTS = [
-  {
-    title: "The Net",
-    line1: "Write a narrative (story) that includes the idea of a net.",
-    line2: "Something stuck, a rescue, or a complex web of events.",
-    line3: "You can use an idea on this prompt or your own idea about a net.",
-    thinkAbout: ["the characters and where they are", "the complication or problem to be solved", "how the story will end"],
-    img: "thenet.jpeg"
-  },
-  {
-    title: "The Secret Door",
-    line1: "Write a story about discovering a secret door where it shouldn't be.",
-    line2: "Perhaps it is hidden behind a bookshelf, buried in a garden, or appears only at midnight. Where does it lead?",
-    line3: "Focus on the suspense and the wonder of discovery.",
-    thinkAbout: ["the mysterious appearance of the door", "the feeling of turning the handle", "what lies on the other side"],
-    img: "thesecretdoor.jpeg"
-  },
-  {
-    title: "The Message",
-    line1: "Write a narrative about a message that changes everything.",
-    line2: "It could be a letter in a bottle, a mysterious text, or a coded map. Who sent it, and what does it reveal?",
-    line3: "Decide if the message brings a warning, a gift, or a challenge.",
-    thinkAbout: ["the moment the message is found", "deciphering the meaning", "the journey that follows"],
-    img: "themessage.jpeg"
-  },
-  {
-    title: "The Bridge",
-    line1: "Write a narrative about a journey across a significant bridge.",
-    line2: "The bridge might be dangerous, magical, or the only way to reach a safe place. What is waiting on the other side?",
-    line3: "Your bridge could be made of rope, stone, or even light.",
-    thinkAbout: ["the height and the view below", "the obstacles faced while crossing", "reaching the destination"],
-    img: "thebridge.jpeg"
-  },
-  {
-    title: "The Key",
-    line1: "Write a story about a key that doesn't fit any normal lock.",
-    line2: "Maybe it unlocks a memory, a hidden world, or a giant machine.",
-    line3: "Think about who gave the key to the character and why.",
-    thinkAbout: ["the intricate design of the key", "the search for the right lock", "the consequences of opening it"],
-    img: "thekey.jpeg"
-  },
-  {
-    title: "The Storm",
-    line1: "Write a narrative set during a storm that changes the environment.",
-    line2: "It could be a literal weather storm, or a 'storm' of events.",
-    line3: "Describe the power of nature and how the characters react to it.",
-    thinkAbout: ["the sounds and smells of the storm", "seeking shelter or being caught outside", "the calm that follows"],
-    img: "thestorm.jpeg"
-  },
-  {
-    title: "Lost and Found",
-    line1: "Write a story about something precious that was lost and then found in an unlikely place.",
-    line2: "Maybe it's a family heirloom, a map, or a mysterious object.",
-    line3: "Explore the journey to recover the item.",
-    thinkAbout: ["why the object is so important", "the clues that lead to it", "the feeling of finding it again"],
-    img: "lostandfound.jpeg"
-  },
-  {
-    title: "The Invention",
-    line1: "Write a story about an invention that works in a very surprising way.",
-    line2: "Your character might be a brilliant scientist or a lucky amateur.",
-    line3: "Describe the machine and the day it was first tested.",
-    thinkAbout: ["the workshop filled with tools", "the moment of activation", "the unintended side effects"],
-    img: "theinvention.jpeg"
-  },
-  {
-    title: "The New Neighbor",
-    line1: "Write a story about someone strange or interesting moving in next door.",
-    line2: "They might have unusual habits, strange luggage, or a secret visitor.",
-    line3: "Focus on the curiosity and observations of your character.",
-    thinkAbout: ["the moving truck arriving at night", "glimpses through the curtains", "the first interaction"],
-    img: "theneighbour.jpeg"
-  },
-  {
-    title: "The Time Capsule",
-    line1: "Write a story about digging up a time capsule from fifty years ago.",
-    line2: "What is inside, and how does it relate to the present day?",
-    line3: "Consider if the items inside are a warning or a gift.",
-    thinkAbout: ["the rusty metal box buried deep", "the smell of old paper and history", "the person who originally buried it"],
-    img: "thetimecapsule.jpeg"
-  }
+  {title: "The Net", line1: "Write a narrative (story) that includes the idea of a net.", line2: "Something stuck, a rescue, or a complex web of events.", line3: "You can use an idea on this prompt or your own idea about a net.", thinkAbout: ["the characters and where they are", "the complication or problem to be solved", "how the story will end"], img: "thenet.jpeg"},
+  {title: "The Secret Door", line1: "Write a story about discovering a secret door where it shouldn't be.", line2: "Perhaps it is hidden behind a bookshelf, buried in a garden, or appears only at midnight. Where does it lead?", line3: "Focus on the suspense and the wonder of discovery.", thinkAbout: ["the mysterious appearance of the door", "the feeling of turning the handle", "what lies on the other side"], img: "thesecretdoor.jpeg"},
+  {title: "The Message", line1: "Write a narrative about a message that changes everything.", line2: "It could be a letter in a bottle, a mysterious text, or a coded map. Who sent it, and what does it reveal?", line3: "Decide if the message brings a warning, a gift, or a challenge.", thinkAbout: ["the moment the message is found", "deciphering the meaning", "the journey that follows"], img: "themessage.jpeg"},
+  {title: "The Bridge", line1: "Write a narrative about a journey across a significant bridge.", line2: "The bridge might be dangerous, magical, or the only way to reach a safe place. What is waiting on the other side?", line3: "Your bridge could be made of rope, stone, or even light.", thinkAbout: ["the height and the view below", "the obstacles faced while crossing", "reaching the destination"], img: "thebridge.jpeg"},
+  {title: "The Key", line1: "Write a story about a key that doesn't fit any normal lock.", line2: "Maybe it unlocks a memory, a hidden world, or a giant machine.", line3: "Think about who gave the key to the character and why.", thinkAbout: ["the intricate design of the key", "the search for the right lock", "the consequences of opening it"], img: "thekey.jpeg"},
+  {title: "The Storm", line1: "Write a narrative set during a storm that changes the environment.", line2: "It could be a literal weather storm, or a 'storm' of events.", line3: "Describe the power of nature and how the characters react to it.", thinkAbout: ["the sounds and smells of the storm", "seeking shelter or being caught outside", "the calm that follows"], img: "thestorm.jpeg"},
+  {title: "Lost and Found", line1: "Write a story about something precious that was lost and then found in an unlikely place.", line2: "Maybe it's a family heirloom, a map, or a mysterious object.", line3: "Explore the journey to recover the item.", thinkAbout: ["why the object is so important", "the clues that lead to it", "the feeling of finding it again"], img: "lostandfound.jpeg"},
+  {title: "The Invention", line1: "Write a story about an invention that works in a very surprising way.", line2: "Your character might be a brilliant scientist or a lucky amateur.", line3: "Describe the machine and the day it was first tested.", thinkAbout: ["the workshop filled with tools", "the moment of activation", "the unintended side effects"], img: "theinvention.jpeg"},
+  {title: "The New Neighbor", line1: "Write a story about someone strange or interesting moving in next door.", line2: "They might have unusual habits, strange luggage, or a secret visitor.", line3: "Focus on the curiosity and observations of your character.", thinkAbout: ["the moving truck arriving at night", "glimpses through the curtains", "the first interaction"], img: "theneighbour.jpeg"},
+  {title: "The Time Capsule", line1: "Write a story about digging up a time capsule from fifty years ago.", line2: "What is inside, and how does it relate to the present day?", line3: "Consider if the items inside are a warning or a gift.", thinkAbout: ["the rusty metal box buried deep", "the smell of old paper and history", "the person who originally buried it"], img: "thetimecapsule.jpeg"}
 ];
 
 let currentPromptIdx = 0;
@@ -315,12 +289,18 @@ const analysisSummary=document.getElementById('analysisSummary')
 const analysisText=document.getElementById('analysisText')
 const toggleStopBtn=document.getElementById('toggleStopBtn')
 const mosaicImg=document.getElementById('mosaicImg')
+const studentNameInput=document.getElementById('studentName')
+const yearLevelSelect=document.getElementById('yearLevel')
+const mainHeaderTitle=document.getElementById('mainHeaderTitle')
+const beginTestBtn=document.getElementById('beginTestBtn')
+const setupOverlay=document.getElementById('setupOverlay')
 
-let seconds=40*60
+let seconds=42*60
 let timerVisible=true
 let dark=false
 let stopMode = false;
-const STORAGE_KEY='naplan-writing-tool-autosave'
+let timerInterval = null;
+const STORAGE_KEY='prompt-writer-autosave'
 
 const STARTER_WORDS=new Set(['the','it','a','an','he','she','his','her','this','i','my','we','suddenly'])
 const AUX_WORDS=new Set(['was','were','is','are','has','had','have','be','been','could','would','should'])
@@ -335,8 +315,24 @@ const ADJECTIVE_WHITELIST=new Set(['big','small','little','happy','sad','angry',
 const ADJECTIVE_SUFFIXES=['ous','ful','able','ible','al','ive','less','ish','ic','ary','ory','ent','ant','some','y']
 const CATEGORY_META={starter:{label:'Sentence starts',colour:'#9bc9ff'},auxiliary:{label:'Auxiliary verbs',colour:'#ffb7b7'},filter:{label:'Filter words',colour:'#d6b8ff'},adverb:{label:'Adverbs',colour:'#fff2a6'},basic:{label:'Basic words',colour:'#b9efb7'},repeat:{label:'Repeated key words',colour:'#ffd1a8'},adjective:{label:'Adjectives',colour:'#ff96cc'}}
 
-function updateTimer(){const mins=String(Math.floor(seconds/60)).padStart(2,'0');const secs=String(seconds%60).padStart(2,'0');if(timerEl) timerEl.innerHTML=`${mins}:${secs}<small>Hours&nbsp;&nbsp;&nbsp;Mins</small>`;if(seconds>0)seconds--}
-updateTimer();setInterval(updateTimer,1000)
+function updateTimerDisplay(){
+  const mins=String(Math.floor(seconds/60)).padStart(2,'0');
+  const secs=String(seconds%60).padStart(2,'0');
+  if(timerEl) timerEl.innerHTML=`${mins}:${secs}<small>Hours&nbsp;&nbsp;&nbsp;Mins</small>`;
+}
+
+function startTimer(){
+  if(timerInterval) return;
+  timerInterval = setInterval(()=>{
+    if(seconds>0) {
+      seconds--;
+      updateTimerDisplay();
+    } else {
+      clearInterval(timerInterval);
+    }
+  }, 1000);
+}
+
 if(hideTimeBtn) hideTimeBtn.onclick=()=>{timerVisible=!timerVisible;timerEl.classList.toggle('hidden',!timerVisible);hideTimeBtn.innerHTML=timerVisible?'Hide<br>time':'Show<br>time'}
 
 function loadPrompt(idx) {
@@ -348,10 +344,8 @@ function loadPrompt(idx) {
   document.getElementById('pLine1').textContent = p.line1;
   document.getElementById('pLine2').textContent = p.line2;
   document.getElementById('pLine3').textContent = p.line3;
-  
   const list = document.getElementById('pThinkList');
   list.innerHTML = p.thinkAbout.map(item => `<li>${item}</li>`).join('');
-  
   mosaicImg.src = p.img;
 }
 
@@ -386,7 +380,6 @@ function analyseWriting(text){
         const repeatHit=repeatedWords.has(lower);
         const adjectiveHit=isAdjective(lower);
         const stopHit=STOP_WORDS.has(lower);
-
         if(starterHit){cat='starter';counts.starter++}
         else if(auxHit){cat='auxiliary';counts.auxiliary++}
         else if(filterHit){cat='filter';counts.filter++}
@@ -394,10 +387,8 @@ function analyseWriting(text){
         else if(basicHit){cat='basic';counts.basic++}
         else if(repeatHit){cat='repeat';counts.repeat++}
         else if(adjectiveHit){cat='adjective';counts.adjective++}
-
         if(adjectiveHit) adjectiveCount++;
         if(stopHit) counts.stop++;
-        
         const classes=[];
         if(cat) classes.push(`hl-${cat}`);
         if(stopHit) classes.push('hl-stop');
@@ -416,11 +407,7 @@ function renderAnalysis(isRealtime = false){
   const targetText = isRealtime ? analysisText.innerText : writingArea.innerText;
   const res=analyseWriting(targetText);
   if(finishMeta) finishMeta.textContent=res.totalWords+' words written';
-  
-  if(!isRealtime) {
-      analysisText.innerHTML=res.html;
-  }
-  
+  if(!isRealtime) analysisText.innerHTML=res.html;
   const rows=[];
   Object.keys(CATEGORY_META).forEach(key=>{
     const meta=CATEGORY_META[key];
@@ -448,25 +435,43 @@ function loadWriting(){
   try{
     const saved=localStorage.getItem(STORAGE_KEY);
     if(saved){writingArea.innerHTML=saved}
-    else {
-      writingArea.innerHTML = "Click Start writing above to see the prompt and begin your story...";
-    }
+    else {writingArea.innerHTML = "Click Start writing above to see the prompt and begin your story...";}
   }catch(e){}
 }
 
 loadPrompt(0);
 loadWriting();
 writingArea.addEventListener('input',()=>{updateWordCount();saveWriting()});
-updateWordCount()
+updateWordCount();
+updateTimerDisplay();
+
+beginTestBtn.onclick=()=>{
+    const name = studentNameInput.value.trim();
+    const year = yearLevelSelect.value;
+    if (name || year) {
+        let headerTxt = "";
+        if (name && year) headerTxt = `${name} | Year ${year}`;
+        else if (name) headerTxt = name;
+        else headerTxt = `Year ${year}`;
+        mainHeaderTitle.textContent = headerTxt;
+    }
+    setupOverlay.style.display = 'none';
+    promptOverlay.classList.add('open');
+    startTimer();
+}
 
 promptBtn.onclick=()=>{finishOverlay.classList.remove('open');promptOverlay.classList.add('open')}
 nextPromptBtn.onclick=()=>{currentPromptIdx=(currentPromptIdx+1)%PROMPTS.length;loadPrompt(currentPromptIdx)}
-startWriting.onclick=()=>{promptOverlay.classList.remove('open');finishOverlay.classList.remove('open');if(writingArea.innerText.includes("Click Start writing")) writingArea.innerHTML=""}
+startWriting.onclick=()=>{
+    promptOverlay.classList.remove('open');
+    finishOverlay.classList.remove('open');
+    if(writingArea.innerText.includes("Click Start writing")) writingArea.innerHTML="";
+}
+
 closePromptBtn.onclick=()=>{promptOverlay.classList.remove('open')}
 finishBtn.onclick=()=>{renderAnalysis();promptOverlay.classList.remove('open');finishOverlay.classList.add('open')}
 
 exitFinishBtn.onclick=()=>{
-    // Sync polished text back to main editor as plain text to strip highlight spans
     writingArea.innerText = analysisText.innerText;
     finishOverlay.classList.remove('open');
     updateWordCount();
@@ -496,14 +501,12 @@ analysisGrid.addEventListener('change',e=>{
 toggleStopBtn.onclick=()=>{
   stopMode = !stopMode;
   if(stopMode) {
-      // STOP WORD MODE: Only Greys
       analysisText.classList.add('stop-only');
       analysisText.classList.remove('hide-stop');
       Object.keys(CATEGORY_META).forEach(key => analysisText.classList.add('hide-'+key));
       analysisGrid.querySelectorAll('input[type="checkbox"]').forEach(cb=>cb.checked=false);
       toggleStopBtn.innerText = "Restore Category Highlights";
   } else {
-      // CATEGORY HIGHLIGHT MODE: Colorful
       analysisText.classList.remove('stop-only');
       analysisText.classList.add('hide-stop');
       Object.keys(CATEGORY_META).forEach(key => analysisText.classList.remove('hide-'+key));
