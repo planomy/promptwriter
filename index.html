@@ -9,6 +9,7 @@
 html,body{height:100%}
 body{margin:0;background:#dfe5ef;font-family:Arial, Helvetica, sans-serif;display:flex;align-items:center;justify-content:center}
 :root{--nap-blue:#3f67c8;--nap-blue-dark:#3158b5;--nap-blue-light:#5579d3}
+.hidden{visibility:hidden}
 
 /* Universal Elegant Scrollbar */
 ::-webkit-scrollbar { width: 14px; height: 14px; }
@@ -56,8 +57,10 @@ body{margin:0;background:#dfe5ef;font-family:Arial, Helvetica, sans-serif;displa
 .setup-title{font-size:16px;font-weight:700;color:#334155;margin-bottom:20px}
 .begin-btn{width:100%;max-width:220px;height:50px;background:linear-gradient(180deg,#567cdb 0%, #3e66c9 100%);color:#fff;font-size:17px;font-weight:700;border:0;border-radius:8px;cursor:pointer;margin-top:15px;box-shadow: 0 4px 12px rgba(62,102,201,0.25);transition:transform 0.1s;}.begin-btn:active{transform:scale(0.98)}
 
+/* Overlay Structures */
 .prompt-overlay{position:absolute;inset:56px 0 0 0;background:#fff;display:none;z-index:8}.prompt-overlay.open{display:flex;flex-direction:column}
 .audio-strip{height:34px;background:linear-gradient(180deg,#4671d1 0%, #3560c1 100%);border-bottom:1px solid #6e89cb;position:relative;flex:0 0 34px}
+audio-close{position:absolute;right:10px;top:-29px;width:28px;height:28px;color:#dfe8ff;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;cursor:pointer}
 .audio-close{position:absolute;right:10px;top:-29px;width:28px;height:28px;color:#dfe8ff;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;cursor:pointer}
 .audio-icons{position:absolute;left:12px;top:8px;display:flex;align-items:center;gap:16px;color:#eef3ff;font-size:16px}
 .audio-progress{position:absolute;left:95px;right:118px;top:13px;height:6px;border-radius:4px;background:rgba(255,255,255,0.24);box-shadow:inset 0 1px 0 rgba(0,0,0,0.1)}.audio-progress::after{content:"";position:absolute;left:0;top:0;width:0%;height:100%;border-radius:4px;background:#dfe8ff}
@@ -89,12 +92,12 @@ body{margin:0;background:#dfe5ef;font-family:Arial, Helvetica, sans-serif;displa
 .finish-title{font-size:20px;font-weight:700;color:#3b4051;margin-bottom:5px}.finish-copy{font-size:13px;color:#5a6374;line-height:1.3}.finish-meta{font-size:15px;font-weight:700;color:#4b5870;margin:10px 0}
 .finish-actions{display:flex;flex-direction:column;gap:8px;margin-top:auto;padding-top:15px}
 .finish-btn{width:100%;height:44px;border:0;padding:0 18px;color:#fff;font-size:16px;font-weight:700;cursor:pointer;background:linear-gradient(180deg,#5177d7 0%, #3d64c7 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,0.2);border-radius:6px; display:flex; align-items:center; justify-content:center; transition: all 0.2s;}
-.finish-btn:disabled { opacity: 0.8; cursor: wait; }
+.finish-btn:disabled{opacity:0.8;cursor:wait}
 .finish-btn-alt{width:100%;height:40px;border:1px solid #d5dcea;background:#fff;color:var(--nap-blue);font-weight:700;cursor:pointer;border-radius:6px}
 
 .api-error-msg { color: #c0392b; font-size: 13px; font-weight: 600; text-align: center; display: none; margin-bottom: 8px; word-break: break-word;}
 
-/* Analysis Display */
+/* Analysis Grid Styling */
 .analysis-grid{display:flex;flex-direction:column;gap:5px;margin-bottom:10px}
 .analysis-row{display:grid;grid-template-columns:20px 1fr auto 18px;align-items:center;gap:6px;font-size:12px;color:#4b5870;background:#fff;padding:6px 8px;border:1px solid #e9ecf1;border-radius:4px}
 .analysis-light{width:10px;height:10px;border-radius:50%;display:inline-block}.analysis-light.good{background:#31a24c}.analysis-light.bad{background:#cf3d32}
@@ -114,7 +117,18 @@ body{margin:0;background:#dfe5ef;font-family:Arial, Helvetica, sans-serif;displa
 .analysis-text.hide-stop .hl-stop { background: transparent; }
 .analysis-text.stop-only .hl:not(.hl-stop) { background: transparent !important; padding: 0 !important; }
 
-/* Report Card Overlay */
+.analysis-text.hide-starter .hl-starter,
+.analysis-text.hide-auxiliary .hl-auxiliary,
+.analysis-text.hide-filter .hl-filter,
+.analysis-text.hide-adverb .hl-adverb,
+.analysis-text.hide-basic .hl-basic,
+.analysis-text.hide-repeat .hl-repeat,
+.analysis-text.hide-adjective .hl-adjective {
+  background: transparent !important;
+  padding: 0 !important;
+}
+
+/* Report Overlay Styling */
 .report-overlay { position:absolute; inset:0; background:rgba(255,255,255,0.92); z-index:30; display:none; align-items:center; justify-content:center; padding:20px; backdrop-filter:blur(4px); }
 .report-overlay.open { display:flex; }
 .report-card { background:#fff; width:100%; max-width:760px; max-height:95%; display:flex; flex-direction:column; border-radius:12px; box-shadow:0 25px 50px -12px rgba(0,0,0,0.25); border:1px solid #d5dcea; overflow:hidden; }
@@ -125,7 +139,6 @@ body{margin:0;background:#dfe5ef;font-family:Arial, Helvetica, sans-serif;displa
 .criterion-score small { font-size:12px; color:#64748b; display:block; font-weight:700;}
 .criterion-content h4 { margin:0 0 4px 0; font-size:15px; color:#1e293b;}
 .criterion-content p { margin:0; font-size:13px; color:#475569; line-height:1.4;}
-
 .report-improvement { background: #eff6ff; border-left: 4px solid var(--nap-blue); padding: 12px 16px; margin-bottom: 8px; border-radius: 4px; color: #1e293b; font-size: 14px; line-height: 1.5; }
 .report-improvement strong { color: var(--nap-blue-dark); display: block; margin-bottom: 2px; font-size: 15px; }
 .report-actions-bar { display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; border-top: 1px solid #e2e8f0; background: #f8fafc; }
@@ -133,7 +146,7 @@ body{margin:0;background:#dfe5ef;font-family:Arial, Helvetica, sans-serif;displa
 .btn-secondary { height: 44px; padding: 0 16px; background: #fff; border: 1px solid #cbd5e1; border-radius: 6px; color: #475569; font-weight: 700; cursor: pointer; transition: all 0.2s; }
 .btn-secondary:hover { background: #f1f5f9; color: #1e293b; }
 
-/* Dark Mode Extensions */
+/* Dark Mode */
 .dark-mode .content,.dark-mode .editor,.dark-mode .footer,.dark-mode .app, .dark-mode .setup-overlay{background:#2f3c4f}
 .dark-mode .setup-card, .dark-mode .finish-sidebar, .dark-mode .finish-main{background:#34465d; border-color:#445a77}
 .dark-mode .text-area, .dark-mode .entry-input, .dark-mode .entry-select, .dark-mode .analysis-row{background:transparent; color:#ffffff; border-color:#445a77}
@@ -294,8 +307,9 @@ body{margin:0;background:#dfe5ef;font-family:Arial, Helvetica, sans-serif;displa
   </div>
 
 <script>
-// GEMINI API KEY SETUP
-const apiKey = "AIzaSyBMIuzfjFgXUNpTSqt6rZ1UXNzuNedY98o"; 
+// ROTATE THIS KEY BEFORE USE
+const apiKey = "AIzaSyAdveloVy7qk8MjcC1Sr0J3P2x_MjkMdbk";
+const MODEL_NAME = "gemini-2.5-flash";
 
 const PROMPTS = [
   {title: "The Net", line1: "Write a narrative (story) that includes the idea of a net.", line2: "Something stuck, a rescue, or a complex web of events.", line3: "You can use an idea on this prompt or your own idea about a net.", thinkAbout: ["the characters and where they are", "the complication or problem to be solved", "how the story will end"], img: "thenet.jpeg"},
@@ -327,15 +341,15 @@ const emailReportBtn=document.getElementById('emailReportBtn'), downloadReportBt
 const apiErrorMsg=document.getElementById('apiErrorMsg');
 
 let seconds=42*60, timerVisible=true, dark=false, stopMode = false, timerInterval = null;
-const STORAGE_KEY='prompt-writer-autosave'
+const STORAGE_KEY='prompt-writer-autosave';
 
-const STARTER_WORDS=new Set(['the','it','a','an','he','she','his','her','this','i','my','we','suddenly'])
-const AUX_WORDS=new Set(['was','were','is','are','has','had','have','be','been','could','would','should'])
-const FILTER_WORDS=new Set(['saw','see','seen','heard','hear','felt','feel','noticed','notice','thought','think','wondered','wonder','realised','realized','knew','know','watched','watch','seemed','seem','decided','decide','looked','look'])
-const BASIC_WORDS=new Set(['good','bad','nice','big','small','little','ran','run','went','go','got','get','said','say','look','looked','see','saw','walk','walked','happy','sad','mad','fun','cool','awesome','thing','stuff','want','wanted'])
+const STARTER_WORDS=new Set(['the','it','a','an','he','she','his','her','this','i','my','we','suddenly']);
+const AUX_WORDS=new Set(['was','were','is','are','has','had','have','be','been','could','would','should']);
+const FILTER_WORDS=new Set(['saw','see','seen','heard','hear','felt','feel','noticed','notice','thought','think','wondered','wonder','realised','realized','knew','know','watched','watch','seemed','seem','decided','decide','looked','look']);
+const BASIC_WORDS=new Set(['good','bad','nice','big','small','little','ran','run','went','go','got','get','said','say','look','looked','see','saw','walk','walked','happy','sad','mad','fun','cool','awesome','thing','stuff','want','wanted']);
 const STOP_WORDS_RAW = "a, about, above, after, again, against, all, almost, alone, along, already, also, although, always, am, among, an, and, another, any, anybody, anyone, anything, anyway, anywhere, are, around, as, at, back, be, became, because, become, becomes, becoming, been, before, began, begin, beginning, begins, behind, being, below, beside, besides, between, beyond, both, but, by, can, cannot, could, did, didn't, do, does, doesn't, doing, done, down, during, each, either, else, enough, even, ever, every, everybody, everyone, everything, everywhere, far, few, for, from, further, get, gets, getting, got, gotten, had, hadn't, has, hasn't, have, haven't, having, he, he'd, he'll, he's, her, here, hers, herself, him, himself, his, how, however, i, i'd, i'll, i'm, i've, if, in, inside, into, is, isn't, it, it's, its, itself, just, keep, keeps, kept, kind, know, knows, knew, knowing, last, later, least, less, let, let's, like, likely, little, look, looked, looking, looks, made, make, makes, many, may, maybe, me, might, mine, more, most, mostly, much, must, my, myself, near, nearly, need, needed, needing, needs, never, new, next, no, nobody, none, noone, nor, not, nothing, now, of, off, often, old, on, once, one, only, onto, or, other, others, our, ours, ourselves, out, over, own, perhaps, please, put, puts, putting, quite, rather, really, right, said, same, say, says, saying, see, seeing, seem, seemed, seeming, seems, several, shall, she, she'd, she'll, she's, should, show, showed, showing, shows, since, so, some, somebody, someone, something, sometimes, somewhat, somewhere, still, such, take, taken, taking, tell, than, that, that's, the, their, theirs, them, themselves, then, there, there's, these, they, they'd, they'll, they're, they've, thing, things, think, thinking, this, those, though, through, thus, to, together, too, took, toward, towards, try, trying, turn, turning, turns, under, until, up, upon, us, use, used, using, very, want, wanted, wanting, wants, was, wasn't, way, we, we'd, we'll, we're, we've, well, were, weren't, what, whatever, when, whenever, where, wherever, whether, which, while, who, whoever, whom, whose, why, will, with, within, without, would, yes, yet, you, you'd, you'll, you're, you've, your, yours, yourself, yourselves";
 const STOP_WORDS = new Set(STOP_WORDS_RAW.split(',').map(w => w.trim().toLowerCase()));
-const CATEGORY_META={starter:{label:'Sentence starts',colour:'#9bc9ff'},auxiliary:{label:'Auxiliary verbs',colour:'#ffb7b7'},filter:{label:'Filter words',colour:'#d6b8ff'},adverb:{label:'Adverbs',colour:'#fff2a6'},basic:{label:'Basic words',colour:'#b9efb7'},repeat:{label:'Repeated key words',colour:'#ffd1a8'},adjective:{label:'Adjectives',colour:'#ff96cc'}}
+const CATEGORY_META={starter:{label:'Sentence starts',colour:'#9bc9ff'},auxiliary:{label:'Auxiliary verbs',colour:'#ffb7b7'},filter:{label:'Filter words',colour:'#d6b8ff'},adverb:{label:'Adverbs',colour:'#fff2a6'},basic:{label:'Basic words',colour:'#b9efb7'},repeat:{label:'Repeated key words',colour:'#ffd1a8'},adjective:{label:'Adjectives',colour:'#ff96cc'}};
 
 function updateTimerDisplay(){
   const mins=String(Math.floor(seconds/60)).padStart(2,'0');
@@ -348,11 +362,11 @@ function startTimer(){
 }
 function stopTimer(){ if(timerInterval){clearInterval(timerInterval);timerInterval=null;} }
 
-hideTimeBtn.onclick=()=>{timerVisible=!timerVisible;timerEl.classList.toggle('hidden',!timerVisible);hideTimeBtn.innerHTML=timerVisible?'Hide<br>time':'Show<br>time'}
-darkToggle.onclick=()=>{dark=!dark;document.body.classList.toggle('dark-mode',dark)}
+hideTimeBtn.onclick=()=>{timerVisible=!timerVisible;timerEl.classList.toggle('hidden',!timerVisible);hideTimeBtn.innerHTML=timerVisible?'Hide<br>time':'Show<br>time'};
+darkToggle.onclick=()=>{dark=!dark;document.body.classList.toggle('dark-mode',dark)};
 
 document.querySelectorAll('#editorToolbar span').forEach(btn => {
-  btn.onclick = (e) => {
+  btn.onclick = () => {
     const cmd = btn.getAttribute('data-cmd');
     if(cmd){ document.execCommand(cmd, false, null); writingArea.focus(); }
   };
@@ -406,11 +420,11 @@ function analyseWriting(text){
         if(stopHit) counts.stop++;
         const classes=[]; if(cat) classes.push(`hl-${cat}`); if(stopHit) classes.push('hl-stop');
         html+=classes.length?`<span class="hl ${classes.join(' ')}">${escapeHtml(part)}</span>`:escapeHtml(part);
-        firstWordDone=true
+        firstWordDone=true;
       }else{html+=escapeHtml(part)}
     })
   });
-  return {html,counts,adjectivePercent:totalWords?((adjectiveCount/totalWords)*100):0,stopPercent:totalWords?((counts.stop/totalWords)*100):0,totalWords}
+  return {html,counts,adjectivePercent:totalWords?((adjectiveCount/totalWords)*100):0,stopPercent:totalWords?((counts.stop/totalWords)*100):0,totalWords};
 }
 
 function renderAnalysis(isRealtime = false){
@@ -423,7 +437,7 @@ function renderAnalysis(isRealtime = false){
     const meta=CATEGORY_META[key];
     const countText=key==='adjective'?`${res.adjectivePercent.toFixed(1)}%`:`${res.counts[key]}`;
     const isGood = key==='adjective'? res.adjectivePercent>=12 : res.counts[key]<=(res.totalWords*0.06);
-    rows.push(`<label class="analysis-row"><input type="checkbox" data-cat="${key}" checked><span class="analysis-label"><span class="analysis-swatch" style="background:${meta.colour}"></span>${meta.label}</span><span class="analysis-count">${countText}</span><span class="analysis-light ${isGood?'good':'bad'}"></span></label>`)
+    rows.push(`<label class="analysis-row"><input type="checkbox" data-cat="${key}" checked><span class="analysis-label"><span class="analysis-swatch" style="background:${meta.colour}"></span>${meta.label}</span><span class="analysis-count">${countText}</span><span class="analysis-light ${isGood?'good':'bad'}"></span></label>`);
   });
   rows.push(`<div class="analysis-row"><span></span><span class="analysis-label"><span class="analysis-swatch" style="background:#d7d7d7"></span>Stop words</span><span class="analysis-count">${res.stopPercent.toFixed(1)}%</span><span class="analysis-light ${res.stopPercent<=35?'good':'bad'}"></span></div>`);
   if(analysisGrid) analysisGrid.innerHTML=rows.join('');
@@ -442,31 +456,33 @@ function loadWriting(){
   try{ const saved=localStorage.getItem(STORAGE_KEY); if(saved){writingArea.innerHTML=saved} }catch(e){}
 }
 
-// ---- Navigation Actions ----
+// Navigation Listeners
 beginTestBtn.onclick=()=>{
     const name = studentNameInput.value.trim(), year = yearLevelSelect.value;
     if (name || year) mainHeaderTitle.textContent = (name && year) ? `${name} | Year ${year}` : (name || `Year ${year}`);
-    setupOverlay.style.display = 'none'; promptOverlay.classList.add('open'); startTimer();
-}
-promptBtn.onclick=()=>{finishOverlay.classList.remove('open');promptOverlay.classList.add('open')}
-nextPromptBtn.onclick=()=>{currentPromptIdx=(currentPromptIdx+1)%PROMPTS.length;loadPrompt(currentPromptIdx)}
+    setupOverlay.style.display = 'none'; 
+    promptOverlay.classList.add('open'); 
+    startTimer();
+};
+promptBtn.onclick=()=>{finishOverlay.classList.remove('open');promptOverlay.classList.add('open')};
+nextPromptBtn.onclick=()=>{currentPromptIdx=(currentPromptIdx+1)%PROMPTS.length;loadPrompt(currentPromptIdx)};
 startWriting.onclick=()=>{
     promptOverlay.classList.remove('open'); finishOverlay.classList.remove('open');
     if(writingArea.innerText.includes("Click Start writing")) writingArea.innerHTML="";
-}
-closePromptBtn.onclick=()=>{promptOverlay.classList.remove('open')}
-finishBtn.onclick=()=>{ stopTimer(); renderAnalysis(); promptOverlay.classList.remove('open'); finishOverlay.classList.add('open'); }
+};
+closePromptBtn.onclick=()=>{promptOverlay.classList.remove('open')};
+finishBtn.onclick=()=>{ stopTimer(); renderAnalysis(); promptOverlay.classList.remove('open'); finishOverlay.classList.add('open'); };
 
 copyTextBtn.onclick=()=>{
     const el = document.createElement('textarea'); el.value = analysisText.innerText;
     document.body.appendChild(el); el.select(); document.execCommand('copy'); document.body.removeChild(el);
     copyTextBtn.innerText = "✓ Copied!"; setTimeout(() => { copyTextBtn.innerText = "Copy Text"; }, 2000);
-}
+};
 
 analysisGrid.addEventListener('change',e=>{
   const target=e.target; if(!target||target.type!=='checkbox') return;
   const cat=target.getAttribute('data-cat'); if(cat) analysisText.classList.toggle('hide-'+cat,!target.checked);
-})
+});
 
 toggleStopBtn.onclick=()=>{
   stopMode = !stopMode;
@@ -481,51 +497,82 @@ toggleStopBtn.onclick=()=>{
       analysisGrid.querySelectorAll('input[type="checkbox"]').forEach(cb=>cb.checked=true);
       toggleStopBtn.innerText = "Reveal Stop Words Mode";
   }
-}
+};
 
-// ---- Gemini API Implementation ----
+// ---- Gemini API Integration ----
 async function fetchGeminiReportWithRetry(text, name, year, topic, retries = 5) {
-    // Longer delays specifically to handle HTTP 429 Rate Limiting
     const delays = [2000, 4000, 8000, 16000, 25000];
-const url = \https://www.google.com/search?q=https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent%3Fkey%3D${apiKey}`;`
-    const systemInstruction = `You are an expert NAPLAN marking teacher. Grade the student's narrative text using the 'Narrative marking guide'. 
+const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent";
+    const systemInstruction = `You are an expert NAPLAN marking teacher. Grade the student's narrative text using the Narrative marking guide.
 Criteria (Max Score): Audience (6), Text Structure (4), Ideas (5), Character & Setting (4), Vocabulary (5), Cohesion (4), Paragraphing (2), Sentence Structure (6), Punctuation (5), Spelling (6). Total out of 47.
-Provide ONLY valid JSON: { "totalScore": int, "improvementComment": "string", "criteria": [{ "name": "string", "score": int, "maxScore": int, "feedback": "string" }] }`;
+Provide ONLY valid JSON in this exact shape:
+{
+  "totalScore": 0,
+  "improvementComment": "",
+  "criteria": [
+    {"name":"Audience","score":0,"maxScore":6,"feedback":""},
+    {"name":"Text Structure","score":0,"maxScore":4,"feedback":""},
+    {"name":"Ideas","score":0,"maxScore":5,"feedback":""},
+    {"name":"Character & Setting","score":0,"maxScore":4,"feedback":""},
+    {"name":"Vocabulary","score":0,"maxScore":5,"feedback":""},
+    {"name":"Cohesion","score":0,"maxScore":4,"feedback":""},
+    {"name":"Paragraphing","score":0,"maxScore":2,"feedback":""},
+    {"name":"Sentence Structure","score":0,"maxScore":6,"feedback":""},
+    {"name":"Punctuation","score":0,"maxScore":5,"feedback":""},
+    {"name":"Spelling","score":0,"maxScore":6,"feedback":""}
+  ]
+}`;
 
-    const userPrompt = `Student: ${name}\nYear: ${year}\nTopic: ${topic}\nText: ${text}`;
+    const userPrompt = `Student: ${name || 'Unknown'}\nYear: ${year || 'Unknown'}\nTopic: ${topic || 'Unknown'}\nText: ${text || ''}`;
 
     for (let i = 0; i < retries; i++) {
         try {
             const response = await fetch(url, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ contents: [{ parts: [{ text: userPrompt }] }], systemInstruction: { parts: [{ text: systemInstruction }] }, generationConfig: { responseMimeType: "application/json" } })
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-goog-api-key': apiKey
+                },
+                body: JSON.stringify({
+                    contents: [{ parts: [{ text: userPrompt }] }],
+                    systemInstruction: { parts: [{ text: systemInstruction }] },
+                    generationConfig: {
+                        responseMimeType: 'application/json',
+                        temperature: 0.4
+                    }
+                })
             });
 
             const responseText = await response.text();
 
             if (!response.ok) {
+                let message = `HTTP ${response.status}`;
+                try {
+                    const errJson = JSON.parse(responseText);
+                    const apiMsg = errJson?.error?.message;
+                    if (apiMsg) message += ` - ${apiMsg}`;
+                } catch (_) {}
+
                 if (response.status === 429) {
-                    // Specific Rate Limit handling message for user feedback via console
-                    console.log(`Rate limit reached. Retrying attempt ${i+1}...`);
-                } else if (response.status === 401 || response.status === 403) {
-                    throw new Error(`API Key Error: Invalid or missing key.`);
-                } else if (response.status === 404) {
-                    throw new Error(`Model not found. Please ensure the API model name is correct.`);
+                    throw new Error('429 - Server busy');
                 }
-                throw new Error(`HTTP ${response.status}`);
+                if (response.status === 401 || response.status === 403) {
+                    throw new Error(message + ' - API key invalid or restricted.');
+                }
+                if (response.status === 404) {
+                    throw new Error(message + ' - model not found.');
+                }
+                throw new Error(message);
             }
 
             const data = JSON.parse(responseText);
-            let resultText = data.candidates?.[0]?.content?.parts?.[0]?.text;
-            if (!resultText) throw new Error("Empty AI response");
+            let resultText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+            if (!resultText) throw new Error('Empty AI response');
             resultText = resultText.replace(/```json/gi, '').replace(/```/g, '').trim();
             return JSON.parse(resultText);
         } catch (error) {
             if (i === retries - 1) {
-                if (error.message.includes("429")) {
-                    throw new Error("Server is very busy (Rate Limit). Please wait 60 seconds and try again.");
-                }
+                if (String(error.message).includes('429')) throw new Error('Server busy. Please wait and try again.');
                 throw error;
             }
             await new Promise(r => setTimeout(r, delays[i]));
@@ -535,11 +582,11 @@ Provide ONLY valid JSON: { "totalScore": int, "improvementComment": "string", "c
 
 function displayReportCard(name, year, reportData) {
     lastReportData = reportData;
-    document.getElementById('reportName').textContent = name || "Candidate";
-    document.getElementById('reportYear').textContent = year ? `Year ${year}` : "Level Unknown";
+    document.getElementById('reportName').textContent = name || 'Candidate';
+    document.getElementById('reportYear').textContent = year ? `Year ${year}` : 'Level Unknown';
     document.getElementById('reportTotalScore').textContent = reportData.totalScore || 0;
     const impEl = document.getElementById('reportImprovement');
-    impEl.innerHTML = reportData.improvementComment ? `<strong>How to Improve:</strong> ${escapeHtml(reportData.improvementComment)}` : "";
+    impEl.innerHTML = reportData.improvementComment ? `<strong>How to Improve:</strong> ${escapeHtml(reportData.improvementComment)}` : '';
     const list = document.getElementById('reportCriteriaList'); list.innerHTML = '';
     reportData.criteria.forEach(item => {
         const row = document.createElement('div'); row.className = 'criterion-row';
@@ -552,20 +599,15 @@ function displayReportCard(name, year, reportData) {
 getReportBtn.onclick = async () => {
     const text = analysisText.innerText.trim();
     if (!text || text.length < 5) {
-        apiErrorMsg.textContent = "Please write a story before requesting a report.";
-        apiErrorMsg.style.display = "block";
+        apiErrorMsg.textContent = 'Please write a story first.';
+        apiErrorMsg.style.display = 'block';
         return;
     }
-
-    const name = studentNameInput.value.trim();
-    const year = yearLevelSelect.value;
-    const topic = PROMPTS[currentPromptIdx].title;
-
-    apiErrorMsg.style.display = "none"; 
+    const name = studentNameInput.value.trim(), year = yearLevelSelect.value, topic = PROMPTS[currentPromptIdx].title;
+    apiErrorMsg.style.display = 'none'; 
     getReportBtn.disabled = true;
-    document.getElementById('btnText').textContent = "Generating..."; 
-    document.getElementById('btnSpinner').style.display = "block";
-
+    document.getElementById('btnText').textContent = 'Generating...'; 
+    document.getElementById('btnSpinner').style.display = 'block';
     try {
         const reportData = await fetchGeminiReportWithRetry(text, name, year, topic);
         displayReportCard(name, year, reportData);
@@ -573,18 +615,18 @@ getReportBtn.onclick = async () => {
         reportOverlay.classList.add('open');
     } catch (err) {
         apiErrorMsg.textContent = err.message; 
-        apiErrorMsg.style.display = "block";
+        apiErrorMsg.style.display = 'block';
     } finally {
         getReportBtn.disabled = false; 
-        document.getElementById('btnText').textContent = "Get My Report"; 
-        document.getElementById('btnSpinner').style.display = "none";
+        document.getElementById('btnText').textContent = 'Get My Report'; 
+        document.getElementById('btnSpinner').style.display = 'none';
     }
 };
 
 closeReportBtn.onclick = () => { reportOverlay.classList.remove('open'); finishOverlay.classList.add('open'); };
 
 function generateReportText(name, year) {
-    if (!lastReportData) return "";
+    if (!lastReportData) return '';
     let text = `WRITING REPORT\nStudent: ${name || 'Candidate'} | Year: ${year || 'Unknown'}\nTotal: ${lastReportData.totalScore}/47\n\nIMPROVEMENT:\n${lastReportData.improvementComment}\n\nCRITERIA:\n`;
     lastReportData.criteria.forEach(c => { text += `* ${c.name}: ${c.score}/${c.maxScore}\n  ${c.feedback}\n\n`; });
     return text;
@@ -593,15 +635,15 @@ function generateReportText(name, year) {
 downloadReportBtn.onclick = () => {
     const text = generateReportText(studentNameInput.value, yearLevelSelect.value);
     const blob = new Blob([text], { type: 'text/plain' });
-    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'Report.txt'; a.click();
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'Writing_Report.txt'; a.click();
 };
 
 emailReportBtn.onclick = () => {
     const text = generateReportText(studentNameInput.value, yearLevelSelect.value);
-    window.location.href = `mailto:?subject=Writing Report&body=${encodeURIComponent(text)}`;
+    window.location.href = `mailto:?subject=Writing Assessment Report&body=${encodeURIComponent(text)}`;
 };
 
-// Initial Load
+// Start
 loadPrompt(0); loadWriting(); updateWordCount(); updateTimerDisplay();
 writingArea.addEventListener('input',()=>{updateWordCount();saveWriting()});
 window.addEventListener('beforeunload',saveWriting);
