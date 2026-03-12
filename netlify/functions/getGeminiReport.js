@@ -1,5 +1,3 @@
-const fetch = require('node-fetch');
-
 exports.handler = async (event) => {
   // 1. CORS & Method Guard
   if (event.httpMethod !== "POST") {
@@ -44,8 +42,8 @@ Return ONLY valid JSON in this exact shape:
 
   const userPrompt = `Student: ${name || 'Unknown'}\nYear: ${year || 'Unknown'}\nTopic: ${topic || 'Unknown'}\nText:\n${text}`;
 
-  // 4. Call Gemini
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+  // 4. Call Gemini (Using built-in fetch)
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=${apiKey}`;
 
   try {
     const response = await fetch(url, {
