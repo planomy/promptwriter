@@ -10,83 +10,96 @@ html,body{height:100%}
 body{margin:0;background:#dfe5ef;font-family:Arial, Helvetica, sans-serif;display:flex;align-items:center;justify-content:center}
 :root{--nap-blue:#3f67c8;--nap-blue-dark:#3158b5;--nap-blue-light:#5579d3}
 
+/* Global Svelte Scrollbar Styling - Bulletproof WebKit */
+::-webkit-scrollbar { width: 14px; height: 14px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background-color: #cbd5e0; border-radius: 10px; border: 4px solid #fff; }
+::-webkit-scrollbar-thumb:hover { background-color: #a0aec0; }
+::-webkit-scrollbar-thumb:active { background-color: #718096; }
+
 /* Modern App Container */
-.app{width:90vw;height:90vh;max-width:1180px;max-height:760px;min-width:980px;min-height:620px;background:#ffffff;border:1px solid #d5dcea;border-radius:12px;overflow:hidden;position:relative;display:flex;flex-direction:column;box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0,0,0,0.05)}
+.app{width:90vw;height:90vh;max-width:1180px;max-height:760px;min-width:320px;min-height:480px;background:#ffffff;border:1px solid #d5dcea;border-radius:12px;overflow:hidden;position:relative;display:flex;flex-direction:column;box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0,0,0,0.05)}
 
 .header{height:56px;position:relative;background:#fff;border-bottom:1px solid #d6deed;flex:0 0 56px}
 .header-left,.header-right{position:absolute;top:0;height:56px;width:29%;background:linear-gradient(180deg,var(--nap-blue-light),var(--nap-blue))}
 .header-left{left:0}.header-right{right:0}
-.task-title{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:21px;font-weight:700;color:#35425d}
+.task-title{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:#35425d;padding:0 10px;text-align:center}
 .timer{position:absolute;left:17px;top:8px;color:#e9efff;font-weight:700;font-size:17px;line-height:1;z-index:2}.timer small{display:block;font-size:10px;margin-top:4px;font-weight:400;opacity:.95}
-.pill{position:absolute;top:6px;width:46px;height:40px;border-radius:10px;background:rgba(255,255,255,0.14);color:#eef3ff;font-size:10px;line-height:1.05;display:flex;align-items:center;justify-content:center;text-align:center;cursor:pointer;user-select:none;z-index:2}.pill.one{left:94px}
 
-.content{flex:1;background:#fff;padding:12px 16px 8px;overflow:hidden}
-.instruction{width:92%;max-width:920px;margin:0 auto;color:#525866;font-size:16px;line-height:1.42}.instruction p{margin:0 0 6px 0}
-.editor{width:92%;max-width:920px;height:430px;margin:10px auto 0;border:1px solid #d7dbe4;background:#fff;display:flex;flex-direction:column;box-shadow:inset 0 1px 0 rgba(255,255,255,0.9)}
-.toolbar{height:35px;border-bottom:1px solid #d9dde5;display:flex;align-items:center;gap:12px;padding:0 10px;color:#5c6470;font-size:15px}.toolbar .sep{width:1px;height:18px;background:#d7dbe2}.toolbar span{user-select:none}
-.text-area{flex:1;padding:10px 12px;font-size:15px;line-height:1.26;color:#62666d;outline:none;overflow:auto;white-space:pre-wrap; -webkit-font-smoothing: antialiased;}.text-area::-webkit-scrollbar{width:12px}.text-area::-webkit-scrollbar-track{background:#f0f2f6}.text-area::-webkit-scrollbar-thumb{background:#c0c7d3;border-radius:8px;border:2px solid #f0f2f6}
+/* Pill Buttons in Header */
+.pill{position:absolute;top:6px;width:46px;height:40px;border-radius:10px;background:rgba(255,255,255,0.14);color:#eef3ff;font-size:10px;line-height:1.05;display:flex;align-items:center;justify-content:center;text-align:center;cursor:pointer;user-select:none;z-index:2}
+.pill.one{left:94px}
+.pill.two{left:146px}
 
-.footer{height:66px;border-top:1px solid #d9deea;background:#fff;position:relative;flex:0 0 66px}
-.btn{position:absolute;bottom:10px;width:174px;height:46px;border:0;color:#fff;font-size:18px;font-weight:700;cursor:pointer;background:linear-gradient(180deg,#5177d7 0%, #3d64c7 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,0.2); border-radius:4px;}.btn.left{left:0}.btn.right{right:0}
-.status{position:absolute;right:194px;bottom:21px;color:#616b7d;font-weight:700;font-size:14px;transition:color .2s ease}.status.is-low{color:#616b7d}.status.is-good{color:#2d8a4b}.status.is-high{color:#c0392b}
+/* ADDED min-height: 0 to all flex containers to fix scrollbar blowout */
+.content{flex:1;min-height:0;background:#fff;padding:12px 16px 8px;overflow:hidden;display:flex;flex-direction:column}
+.instruction{width:100%;max-width:920px;margin:0 auto;color:#525866;font-size:15px;line-height:1.4}.instruction p{margin:0 0 4px 0}
+.editor{width:100%;max-width:920px;flex:1;min-height:0;margin:10px auto 0;border:1px solid #d7dbe4;background:#fff;display:flex;flex-direction:column;box-shadow:inset 0 1px 0 rgba(255,255,255,0.9)}
 
-.floating-tools{position:absolute;left:50%;transform:translateX(-50%);bottom:11px;width:60px;height:30px;background:rgba(19,23,31,.95);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#f4f6fa;font-size:16px}
-.tool-icon{display:inline-flex;align-items:center;justify-content:center;min-width:16px;cursor:pointer;user-select:none}
+/* Premium Functional Toolbar */
+.toolbar{height:38px;border-bottom:1px solid #d9dde5;display:flex;align-items:center;gap:12px;padding:0 12px;color:#5c6470;font-size:16px;background:#fcfdfe;flex:0 0 38px}
+.toolbar .sep{width:1px;height:20px;background:#d7dbe2}
+.toolbar span{user-select:none;cursor:pointer;padding:4px 6px;border-radius:4px;transition:background 0.2s, color 0.2s;display:flex;align-items:center;justify-content:center}
+.toolbar span:hover{background:#f0f2f5;color:var(--nap-blue)}
+.toolbar span:active{background:#e2e8f0}
+
+.text-area{flex:1;min-height:0;padding:16px;font-size:16px;line-height:1.5;color:#62666d;outline:none;overflow-y:auto;white-space:pre-wrap; -webkit-font-smoothing: antialiased;}
+
+.footer{height:66px;border-top:1px solid #d9deea;background:#fff;position:relative;flex:0 0 66px;display:flex;align-items:center;justify-content:space-between;padding:0 15px}
+.btn{width:150px;height:44px;border:0;color:#fff;font-size:16px;font-weight:700;cursor:pointer;background:linear-gradient(180deg,#5177d7 0%, #3d64c7 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,0.2); border-radius:6px;transition:opacity 0.2s;}.btn:hover{opacity:0.9}
+.status{color:#616b7d;font-weight:700;font-size:13px;text-align:center;flex:1}.status.is-low{color:#616b7d}.status.is-good{color:#2d8a4b}.status.is-high{color:#c0392b}
 
 /* Registration Screen Overlay */
-.setup-overlay{position:absolute;inset:0;background:#fff;z-index:20;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:40px}
-.setup-card{width:100%;max-width:440px;padding:32px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05)}
-.setup-logo{font-size:32px;font-weight:800;color:var(--nap-blue);margin-bottom:12px;letter-spacing:-0.02em}
-.setup-title{font-size:18px;font-weight:700;color:#334155;margin-bottom:24px}
-.begin-btn{width:220px;height:52px;background:linear-gradient(180deg,#567cdb 0%, #3e66c9 100%);color:#fff;font-size:18px;font-weight:700;border:0;border-radius:8px;cursor:pointer;margin-top:20px;box-shadow: 0 4px 12px rgba(62,102,201,0.25);transition:transform 0.1s;}.begin-btn:active{transform:scale(0.98)}
+.setup-overlay{position:absolute;inset:0;background:#fff;z-index:20;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:20px}
+.setup-card{width:100%;max-width:400px;padding:25px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05)}
+.setup-logo{font-size:28px;font-weight:800;color:var(--nap-blue);margin-bottom:8px;letter-spacing:-0.02em}
+.setup-title{font-size:16px;font-weight:700;color:#334155;margin-bottom:20px}
+.begin-btn{width:100%;max-width:220px;height:50px;background:linear-gradient(180deg,#567cdb 0%, #3e66c9 100%);color:#fff;font-size:17px;font-weight:700;border:0;border-radius:8px;cursor:pointer;margin-top:15px;box-shadow: 0 4px 12px rgba(62,102,201,0.25);transition:transform 0.1s;}.begin-btn:active{transform:scale(0.98)}
 
-.prompt-overlay{position:absolute;inset:56px 0 0 0;background:#fff;display:none;z-index:8}.prompt-overlay.open{display:block}
-.audio-strip{height:34px;background:linear-gradient(180deg,#4671d1 0%, #3560c1 100%);border-bottom:1px solid #6e89cb;position:relative}
+.prompt-overlay{position:absolute;inset:56px 0 0 0;background:#fff;display:none;z-index:8}.prompt-overlay.open{display:flex;flex-direction:column}
+.audio-strip{height:34px;background:linear-gradient(180deg,#4671d1 0%, #3560c1 100%);border-bottom:1px solid #6e89cb;position:relative;flex:0 0 34px}
 .audio-icons{position:absolute;left:12px;top:8px;display:flex;align-items:center;gap:16px;color:#eef3ff;font-size:16px}
 .audio-progress{position:absolute;left:95px;right:118px;top:13px;height:6px;border-radius:4px;background:rgba(255,255,255,0.24);box-shadow:inset 0 1px 0 rgba(0,0,0,0.1)}.audio-progress::after{content:"";position:absolute;left:0;top:0;width:0%;height:100%;border-radius:4px;background:#dfe8ff}
 .audio-dot{position:absolute;left:78px;top:10px;width:10px;height:10px;border-radius:50%;background:#f3f6ff}
 .audio-time{position:absolute;right:12px;top:7px;color:#f0f3fb;font-size:13px;font-weight:700}
 .audio-close{position:absolute;right:10px;top:-29px;width:28px;height:28px;color:#dfe8ff;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;cursor:pointer}
 
-.prompt-body{height:calc(100% - 90px);padding:20px 24px 0;display:grid;grid-template-columns:46px 1fr 400px;gap:24px;overflow:hidden}
+.prompt-body{flex:1;min-height:0;padding:20px 24px;display:grid;grid-template-columns:40px 1fr 42%;gap:24px;overflow:hidden}
 .prompt-band{background:#f3eadc;border-radius:4px}
-.prompt-left{padding:0 10px 18px 0;color:#4a4f59;overflow-y:auto}.prompt-left::-webkit-scrollbar{width:8px}.prompt-left::-webkit-scrollbar-track{background:#f4f5f8}.prompt-left::-webkit-scrollbar-thumb{background:#bec7d5;border-radius:8px}
-.prompt-title{font-size:24px;font-weight:800;color:#3b4051;margin:4px 0 16px}
-.prompt-text{font-size:16px;line-height:1.5;margin-bottom:14px;color:#4a5568}.prompt-section{margin-top:16px}.prompt-section-title{font-size:16px;font-weight:700;margin-bottom:8px;color:#35425d}.prompt-list{margin:0;padding-left:18px;font-size:15px;line-height:1.6}
+.prompt-left{padding:0 5px 15px 0;color:#4a4f59;overflow-y:auto;min-height:0}
+.prompt-left::-webkit-scrollbar-thumb{border-color:#fff;}
+.prompt-title{font-size:22px;font-weight:800;color:#3b4051;margin:0 0 12px}
+.prompt-text{font-size:15px;line-height:1.45;margin-bottom:12px;color:#4a5568}.prompt-section{margin-top:14px}.prompt-section-title{font-size:15px;font-weight:700;margin-bottom:6px;color:#35425d}.prompt-list{margin:0;padding-left:18px;font-size:14px;line-height:1.5}
 
-/* Entry Fields in Registration Card */
-.entry-field{display:flex;flex-direction:column;gap:8px;text-align:left;margin-bottom:16px}
-.entry-label{font-size:12px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.04em}
-.entry-input, .entry-select{height:44px;padding:0 12px;border:1px solid #cbd5e1;border-radius:8px;font-size:15px;color:#1e293b;outline:none;background:#fff}
-.entry-input:focus, .entry-select:focus{border-color:var(--nap-blue);box-shadow:0 0 0 3px rgba(63,103,200,0.1)}
+.prompt-right{display:flex;align-items:flex-start;justify-content:center;overflow:hidden}
+.mosaic-container{width:100%;height:100%;max-height:520px;background:#f7f9fb;border:1px solid #e1e5eb;border-radius:10px;overflow:hidden;box-shadow: 0 4px 12px rgba(0,0,0,0.06);display:flex;align-items:center;justify-content:center}
+.mosaic-img{width:100%;height:100%;object-fit:cover;display:block}
 
-.prompt-right{padding-bottom:18px;display:flex;align-items:flex-start;justify-content:center}
-.mosaic-container{width:100%;max-width:400px;background:#f7f9fb;border:1px solid #e1e5eb;border-radius:10px;overflow:hidden;box-shadow: 0 4px 12px rgba(0,0,0,0.06);display:flex}
-.mosaic-img{width:100%;height:auto;object-fit:contain;display:block}
+.prompt-nav-bar{height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;border-top:1px solid #eee;flex:0 0 56px}
+.change-prompt-btn{cursor:pointer;background:#f0f2f5;padding:8px 16px;border-radius:6px;font-size:13px;font-weight:700;color:#3f67c8;border:1px solid #d5dcea}
+.start-bar{width:180px;height:44px;background:linear-gradient(180deg,#567cdb 0%, #3e66c9 100%);color:#fff;display:flex;align-items:center;justify-content:center;gap:10px;font-size:16px;font-weight:700;cursor:pointer;border-radius:6px;box-shadow: 0 2px 8px rgba(62,102,201,0.2)}
 
-.prompt-nav-bar{height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;border-top:1px solid #eee}
-.change-prompt-btn{cursor:pointer;background:#f0f2f5;padding:8px 16px;border-radius:6px;font-size:14px;font-weight:700;color:#3f67c8;border:1px solid #d5dcea}
-.start-bar{width:200px;height:52px;background:linear-gradient(180deg,#567cdb 0%, #3e66c9 100%);color:#fff;display:flex;align-items:center;justify-content:center;gap:12px;font-size:18px;font-weight:700;cursor:pointer;border-radius:6px}
+.entry-field{display:flex;flex-direction:column;gap:6px;text-align:left;margin-bottom:14px}
+.entry-label{font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.04em}
+.entry-input, .entry-select{height:40px;padding:0 10px;border:1px solid #cbd5e1;border-radius:8px;font-size:14px;color:#1e293b;outline:none;background:#fff}
 
 /* Polish Overlay */
 .finish-overlay{position:absolute;inset:56px 0 0 0;background:#fff;display:none;z-index:9}.finish-overlay.open{display:block}
-.finish-inner{height:100%;display:grid;grid-template-columns:320px 1fr;gap:22px;padding:24px;text-align:left;overflow:hidden}
-.finish-sidebar{border:1px solid #d7dbe4;background:#f7f9fc;padding:18px;display:flex;flex-direction:column;overflow:hidden}.finish-main{border:1px solid #d7dbe4;background:#fff;padding:18px;overflow:auto}
-.finish-title{font-size:24px;font-weight:700;color:#3b4051}.finish-copy{font-size:14px;color:#5a6374;max-width:280px;line-height:1.4}.finish-meta{font-size:16px;font-weight:700;color:#4b5870;margin-top:10px}
-.finish-actions{display:flex;flex-direction:column;gap:10px;margin-top:auto}
-.finish-btn{width:100%;height:48px;border:0;padding:0 18px;color:#fff;font-size:17px;font-weight:700;cursor:pointer;background:linear-gradient(180deg,#5177d7 0%, #3d64c7 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,0.2);border-radius:6px}
-.finish-btn-alt{width:100%;height:44px;border:1px solid #d5dcea;background:#fff;color:var(--nap-blue);font-weight:700;cursor:pointer;border-radius:6px}
-.analysis-grid{display:flex;flex-direction:column;gap:6px;margin-top:10px;flex:1;overflow:hidden}
-.analysis-row{display:grid;grid-template-columns:20px 1fr auto auto;align-items:center;gap:8px;font-size:12px;color:#4b5870;background:#fff;padding:6px 8px;border:1px solid #e9ecf1;border-radius:4px}.analysis-row input{width:14px;height:14px}
-.analysis-swatch{width:12px;height:12px;border-radius:3px;display:inline-block;margin-right:6px;vertical-align:middle}.analysis-label{display:flex;align-items:center;font-weight:700}.analysis-count{font-weight:700;color:#5c6470}
+.finish-inner{height:100%;display:grid;grid-template-columns:300px 1fr;gap:20px;padding:20px;text-align:left;overflow:hidden}
+.finish-sidebar{border:1px solid #d7dbe4;background:#f7f9fc;padding:15px;display:flex;flex-direction:column;overflow-y:auto;min-height:0}
+.finish-main{border:1px solid #d7dbe4;background:#fff;padding:15px;overflow-y:auto;min-height:0}
+.finish-main::-webkit-scrollbar-thumb{border-color:#fff;}
+.finish-sidebar::-webkit-scrollbar-thumb{border-color:#f7f9fc;}
+
+.finish-title{font-size:20px;font-weight:700;color:#3b4051;margin-bottom:5px}.finish-copy{font-size:13px;color:#5a6374;line-height:1.3}.finish-meta{font-size:15px;font-weight:700;color:#4b5870;margin:10px 0}
+.finish-actions{display:flex;flex-direction:column;gap:8px;margin-top:auto;padding-top:15px}
+.finish-btn{width:100%;height:44px;border:0;padding:0 18px;color:#fff;font-size:16px;font-weight:700;cursor:pointer;background:linear-gradient(180deg,#5177d7 0%, #3d64c7 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,0.2);border-radius:6px}
+.finish-btn-alt{width:100%;height:40px;border:1px solid #d5dcea;background:#fff;color:var(--nap-blue);font-weight:700;cursor:pointer;border-radius:6px}
+.analysis-grid{display:flex;flex-direction:column;gap:5px;margin-bottom:10px}
+.analysis-row{display:grid;grid-template-columns:20px 1fr auto 18px;align-items:center;gap:6px;font-size:12px;color:#4b5870;background:#fff;padding:6px 8px;border:1px solid #e9ecf1;border-radius:4px}
 .analysis-light{width:10px;height:10px;border-radius:50%;display:inline-block}.analysis-light.good{background:#31a24c}.analysis-light.bad{background:#cf3d32}
-.analysis-summary{margin-top:8px;font-size:12px;line-height:1.3;color:#5a6374}
-.stop-actions{margin-top:10px;display:flex;flex-direction:column;gap:8px}
-.stop-btn{width:100%;height:36px;border:0;padding:0 14px;color:#fff;font-size:13px;font-weight:700;cursor:pointer;background:linear-gradient(180deg,#6f7d95 0%, #58657b 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,0.18);border-radius:4px}
+.analysis-text{font-size:17px;line-height:1.7;color:#3f4653;white-space:pre-wrap;outline:none;min-height:100%;}.analysis-text .hl{padding:1px 2px;border-radius:3px}
 
-.analysis-text{font-size:17px;line-height:1.75;color:#3f4653;white-space:pre-wrap;outline:none}.analysis-text .hl{padding:1px 2px;border-radius:3px}
-
-/* Precise Color Highlighting */
 .analysis-text .hl-starter{background:#9bc9ff !important} 
 .analysis-text .hl-auxiliary{background:#ffb7b7 !important}
 .analysis-text .hl-filter{background:#d6b8ff !important}
@@ -96,7 +109,6 @@ body{margin:0;background:#dfe5ef;font-family:Arial, Helvetica, sans-serif;displa
 .analysis-text .hl-adjective{background:#ff96cc !important}
 .analysis-text .hl-stop{background:#d7d7d7}
 
-/* Visibility Control */
 .analysis-text.hide-stop .hl-stop:not(.hl-starter):not(.hl-auxiliary):not(.hl-filter):not(.hl-adverb):not(.hl-basic):not(.hl-repeat):not(.hl-adjective) { background: transparent !important; padding: 0 !important; }
 .analysis-text.hide-stop .hl-stop { background: transparent; }
 .analysis-text.stop-only .hl:not(.hl-stop) { background: transparent !important; padding: 0 !important; }
@@ -108,51 +120,47 @@ body{margin:0;background:#dfe5ef;font-family:Arial, Helvetica, sans-serif;displa
 
 .hidden{visibility:hidden}
 .dark-mode .content,.dark-mode .editor,.dark-mode .footer,.dark-mode .app, .dark-mode .setup-overlay{background:#2f3c4f}
-.dark-mode .setup-card{background:#34465d; border-color:#445a77}
+.dark-mode .setup-card, .dark-mode .finish-sidebar, .dark-mode .finish-main{background:#34465d; border-color:#445a77}
 .dark-mode .setup-title, .dark-mode .entry-label, .dark-mode .instruction, .dark-mode .prompt-left, .dark-mode .finish-copy, .dark-mode .finish-meta{color:#e6edf7}
-.dark-mode .text-area, .dark-mode .entry-input, .dark-mode .entry-select{background:#2d3748; color:#ffffff; border-color:#445a77}
-.dark-mode .toolbar, .dark-mode .header{background:#34465d; color:#ffffff; border-bottom:1px solid #445a77}
-.dark-mode .editor,.dark-mode .finish-sidebar,.dark-mode .finish-main{border:1px solid #445a77}
-.dark-mode .footer{border-top:1px solid #445a77}
-.dark-mode .prompt-overlay,.dark-mode .finish-overlay,.dark-mode .finish-sidebar,.dark-mode .finish-main{background:#34465d}
+.dark-mode .text-area, .dark-mode .entry-input, .dark-mode .entry-select, .dark-mode .analysis-row{background:#2d3748; color:#ffffff; border-color:#445a77}
+.dark-mode .toolbar, .dark-mode .header, .dark-mode .prompt-nav-bar{background:#34465d; color:#ffffff; border-bottom:1px solid #445a77}
 .dark-mode .prompt-title,.dark-mode .prompt-text,.dark-mode .prompt-list,.dark-mode .prompt-section-title,.dark-mode .task-title,.dark-mode .finish-title,.dark-mode .status,.dark-mode .analysis-row,.dark-mode .analysis-count,.dark-mode .analysis-summary,.dark-mode .analysis-text{color:#ffffff}
+.dark-mode ::-webkit-scrollbar-thumb { background-color: #5c6b82; border-color: #2d3748; }
+.dark-mode ::-webkit-scrollbar-thumb:hover { background-color: #7a8ba3; }
+.dark-mode .finish-main::-webkit-scrollbar-thumb, .dark-mode .finish-sidebar::-webkit-scrollbar-thumb { border-color: #34465d; }
+.dark-mode .prompt-left::-webkit-scrollbar-thumb { border-color: #2f3c4f; }
 
-@media (max-width:1100px){.app{width:100vw;height:100vh;max-width:none;max-height:none;min-width:0;min-height:0;border-radius:0}.content{padding:10px 10px 6px}.instruction,.editor{width:96%}.editor{height:46vh}.prompt-body{grid-template-columns:36px 1fr 320px;gap:12px}.prompt-text,.prompt-section,.prompt-list{max-width:none}}
-@media (max-width:820px){body{align-items:stretch;justify-content:stretch}.app{border-radius:0}.header{height:54px;flex-basis:54px}.header-left,.header-right{height:54px;width:26%}.task-title{font-size:18px}.timer{left:12px;top:9px;font-size:16px}.pill.one{left:86px;width:42px;height:38px}.instruction{font-size:15px;line-height:1.35}.editor{height:52vh;margin-top:8px}.toolbar{gap:10px;font-size:14px;padding:0 8px}.text-area{font-size:16px;line-height:1.32}.btn{width:138px;font-size:16px;height:42px}.status{right:150px;font-size:13px;bottom:20px}.floating-tools{width:60px;gap:16px}.prompt-overlay{inset:54px 0 0 0}.prompt-body{grid-template-columns:28px 1fr;grid-template-rows:auto auto;gap:12px;padding:12px 12px 12px;height:calc(100% - 110px)}.prompt-band{margin-left:0;grid-row:1 / span 2}.prompt-left{padding:8px 0 0 0;max-height:38vh}.prompt-right{padding:0 0 10px 0}.prompt-title{font-size:20px;margin:4px 0 14px}.prompt-text,.prompt-section-title,.prompt-list{font-size:14px}.start-bar{width:50%}.finish-inner{grid-template-columns:1fr;padding:14px}.finish-title{font-size:28px}.finish-copy{font-size:16px}.finish-actions{flex-direction:column;width:100%;max-width:320px}.finish-btn{width:100%}}
+@media (max-width:820px){
+    body{align-items:stretch;justify-content:stretch}.app{border-radius:0}
+    .header-left,.header-right{width:22%}
+    .task-title{font-size:15px}.timer{left:10px;font-size:15px}.pill.one{left:75px;width:38px}
+    .pill.two{left:118px;width:38px}
+    .prompt-body{grid-template-columns: 20px 1fr; grid-template-rows: auto auto; height: calc(100% - 110px); padding: 15px;}
+    .prompt-band{grid-row: 1 / span 2}
+    .prompt-right{grid-row: 2; grid-column: 2; padding: 10px 0;}
+    .mosaic-container{max-height: 250px;}
+    .finish-inner{grid-template-columns: 1fr; grid-template-rows: auto 1fr;}
+    .finish-main{order: 1; height: 40vh;}
+}
 </style>
 </head>
 <body>
   <div class="app">
-    <!-- First Screen: Setup -->
     <div class="setup-overlay" id="setupOverlay">
       <div class="setup-card">
-        <div class="setup-logo">Prompt Writer <em>PRO</em></div>
+        <div class="setup-logo">Prompt Writer</div>
         <div class="setup-title">Candidate Registration</div>
-        
         <div class="entry-field">
           <label class="entry-label">Student Name</label>
           <input type="text" id="studentName" class="entry-input" placeholder="e.g. Liam Smith">
         </div>
-        
         <div class="entry-field">
           <label class="entry-label">Year Level</label>
           <select id="yearLevel" class="entry-select">
             <option value="">Select Level</option>
-            <option value="1">Year 1</option>
-            <option value="2">Year 2</option>
-            <option value="3">Year 3</option>
-            <option value="4">Year 4</option>
-            <option value="5">Year 5</option>
-            <option value="6">Year 6</option>
-            <option value="7">Year 7</option>
-            <option value="8">Year 8</option>
-            <option value="9">Year 9</option>
-            <option value="10">Year 10</option>
-            <option value="11">Year 11</option>
-            <option value="12">Year 12</option>
+            <option value="1">Year 1</option><option value="2">Year 2</option><option value="3">Year 3</option><option value="4">Year 4</option><option value="5">Year 5</option><option value="6">Year 6</option><option value="7">Year 7</option><option value="8">Year 8</option><option value="9">Year 9</option><option value="10">Year 10</option><option value="11">Year 11</option><option value="12">Year 12</option>
           </select>
         </div>
-
         <button class="begin-btn" id="beginTestBtn">BEGIN TEST</button>
       </div>
     </div>
@@ -162,6 +170,7 @@ body{margin:0;background:#dfe5ef;font-family:Arial, Helvetica, sans-serif;displa
       <div class="header-right"></div>
       <div class="timer" id="timer">42:00<small>Hours&nbsp;&nbsp;&nbsp;Mins</small></div>
       <div class="pill one" id="hideTimeBtn">Hide<br>time</div>
+      <div class="pill two" id="darkToggle">Dark<br>mode</div>
       <div class="task-title" id="mainHeaderTitle">Narrative Writing Sim</div>
     </div>
 
@@ -172,8 +181,13 @@ body{margin:0;background:#dfe5ef;font-family:Arial, Helvetica, sans-serif;displa
         <p id="instructionLine3"></p>
       </div>
       <div class="editor">
-        <div class="toolbar">
-          <span>↶</span><span>↷</span><span>✂</span><span>◔</span><span>↺</span><span style="font-size:13px">14pt</span><div class="sep"></div><span><b>B</b></span><span><i>I</i></span><span><u>U</u></span><span>≡</span><span>☰</span><span>≣</span>
+        <div class="toolbar" id="editorToolbar">
+          <span data-cmd="undo">↶</span>
+          <span data-cmd="redo">↷</span>
+          <div class="sep"></div>
+          <span data-cmd="bold" style="font-weight:bold">B</span>
+          <span data-cmd="italic" style="font-style:italic">I</span>
+          <span data-cmd="underline" style="text-decoration:underline">U</span>
         </div>
         <div class="text-area" id="writingArea" contenteditable="true" spellcheck="true"></div>
       </div>
@@ -181,9 +195,6 @@ body{margin:0;background:#dfe5ef;font-family:Arial, Helvetica, sans-serif;displa
 
     <div class="footer">
       <button class="btn left" id="promptBtn">‹&nbsp;&nbsp;Prompt</button>
-      <div class="floating-tools">
-        <span class="tool-icon" id="darkToggle">◐</span>
-      </div>
       <div class="status" id="wordCount">0 words</div>
       <button class="btn right" id="finishBtn">Finish&nbsp;&nbsp;›</button>
     </div>
@@ -207,7 +218,6 @@ body{margin:0;background:#dfe5ef;font-family:Arial, Helvetica, sans-serif;displa
             <div class="prompt-section-title">Think about:</div>
             <ul class="prompt-list" id="pThinkList"></ul>
           </div>
-          
           <div class="prompt-section">
             <div class="prompt-section-title">Remember to:</div>
             <ul class="prompt-list">
@@ -220,9 +230,7 @@ body{margin:0;background:#dfe5ef;font-family:Arial, Helvetica, sans-serif;displa
           </div>
         </div>
         <div class="prompt-right">
-          <div class="mosaic-container">
-            <img id="mosaicImg" class="mosaic-img" alt="Visual inspiration">
-          </div>
+          <div class="mosaic-container"><img id="mosaicImg" class="mosaic-img" alt="Visual inspiration"></div>
         </div>
       </div>
       <div class="prompt-nav-bar">
@@ -239,17 +247,13 @@ body{margin:0;background:#dfe5ef;font-family:Arial, Helvetica, sans-serif;displa
           <div class="finish-meta" id="finishMeta">0 words written</div>
           <div class="analysis-grid" id="analysisGrid"></div>
           <div class="analysis-summary" id="analysisSummary"></div>
-          <div class="stop-actions">
-            <button class="stop-btn" id="toggleStopBtn">Reveal Stop Words Mode</button>
-          </div>
+          <div class="stop-actions"><button class="stop-btn" id="toggleStopBtn">Reveal Stop Words Mode</button></div>
           <div class="finish-actions">
             <button class="finish-btn-alt" id="copyTextBtn">Copy Text</button>
             <button class="finish-btn" id="exitFinishBtn">Get My Report</button>
           </div>
         </div>
-        <div class="finish-main">
-          <div class="analysis-text hide-stop" id="analysisText" contenteditable="true" spellcheck="true"></div>
-        </div>
+        <div class="finish-main"><div class="analysis-text hide-stop" id="analysisText" contenteditable="true" spellcheck="true"></div></div>
       </div>
     </div>
   </div>
@@ -269,50 +273,26 @@ const PROMPTS = [
 ];
 
 let currentPromptIdx = 0;
-const timerEl=document.getElementById('timer')
-const hideTimeBtn=document.getElementById('hideTimeBtn')
-const promptBtn=document.getElementById('promptBtn')
-const promptOverlay=document.getElementById('promptOverlay')
-const startWriting=document.getElementById('startWriting')
-const nextPromptBtn=document.getElementById('nextPromptBtn')
-const closePromptBtn=document.getElementById('closePromptBtn')
-const writingArea=document.getElementById('writingArea')
-const wordCount=document.getElementById('wordCount')
-const finishBtn=document.getElementById('finishBtn')
-const finishOverlay=document.getElementById('finishOverlay')
-const finishMeta=document.getElementById('finishMeta')
-const exitFinishBtn=document.getElementById('exitFinishBtn')
-const copyTextBtn=document.getElementById('copyTextBtn')
-const darkToggle=document.getElementById('darkToggle')
-const analysisGrid=document.getElementById('analysisGrid')
-const analysisSummary=document.getElementById('analysisSummary')
-const analysisText=document.getElementById('analysisText')
-const toggleStopBtn=document.getElementById('toggleStopBtn')
-const mosaicImg=document.getElementById('mosaicImg')
-const studentNameInput=document.getElementById('studentName')
-const yearLevelSelect=document.getElementById('yearLevel')
-const mainHeaderTitle=document.getElementById('mainHeaderTitle')
-const beginTestBtn=document.getElementById('beginTestBtn')
-const setupOverlay=document.getElementById('setupOverlay')
+const timerEl=document.getElementById('timer'), hideTimeBtn=document.getElementById('hideTimeBtn'), darkToggle=document.getElementById('darkToggle');
+const promptBtn=document.getElementById('promptBtn'), promptOverlay=document.getElementById('promptOverlay'), startWriting=document.getElementById('startWriting');
+const nextPromptBtn=document.getElementById('nextPromptBtn'), closePromptBtn=document.getElementById('closePromptBtn');
+const writingArea=document.getElementById('writingArea'), wordCount=document.getElementById('wordCount');
+const finishBtn=document.getElementById('finishBtn'), finishOverlay=document.getElementById('finishOverlay'), finishMeta=document.getElementById('finishMeta');
+const exitFinishBtn=document.getElementById('exitFinishBtn'), copyTextBtn=document.getElementById('copyTextBtn');
+const analysisGrid=document.getElementById('analysisGrid'), analysisSummary=document.getElementById('analysisSummary'), analysisText=document.getElementById('analysisText');
+const toggleStopBtn=document.getElementById('toggleStopBtn'), mosaicImg=document.getElementById('mosaicImg');
+const studentNameInput=document.getElementById('studentName'), yearLevelSelect=document.getElementById('yearLevel'), mainHeaderTitle=document.getElementById('mainHeaderTitle');
+const beginTestBtn=document.getElementById('beginTestBtn'), setupOverlay=document.getElementById('setupOverlay');
 
-let seconds=42*60
-let timerVisible=true
-let dark=false
-let stopMode = false;
-let timerInterval = null;
+let seconds=42*60, timerVisible=true, dark=false, stopMode = false, timerInterval = null;
 const STORAGE_KEY='prompt-writer-autosave'
 
 const STARTER_WORDS=new Set(['the','it','a','an','he','she','his','her','this','i','my','we','suddenly'])
 const AUX_WORDS=new Set(['was','were','is','are','has','had','have','be','been','could','would','should'])
 const FILTER_WORDS=new Set(['saw','see','seen','heard','hear','felt','feel','noticed','notice','thought','think','wondered','wonder','realised','realized','knew','know','watched','watch','seemed','seem','decided','decide','looked','look'])
 const BASIC_WORDS=new Set(['good','bad','nice','big','small','little','ran','run','went','go','got','get','said','say','look','looked','see','saw','walk','walked','happy','sad','mad','fun','cool','awesome','thing','stuff','want','wanted'])
-
 const STOP_WORDS_RAW = "a, about, above, after, again, against, all, almost, alone, along, already, also, although, always, am, among, an, and, another, any, anybody, anyone, anything, anyway, anywhere, are, around, as, at, back, be, became, because, become, becomes, becoming, been, before, began, begin, beginning, begins, behind, being, below, beside, besides, between, beyond, both, but, by, can, cannot, could, did, didn't, do, does, doesn't, doing, done, down, during, each, either, else, enough, even, ever, every, everybody, everyone, everything, everywhere, far, few, for, from, further, get, gets, getting, got, gotten, had, hadn't, has, hasn't, have, haven't, having, he, he'd, he'll, he's, her, here, hers, herself, him, himself, his, how, however, i, i'd, i'll, i'm, i've, if, in, inside, into, is, isn't, it, it's, its, itself, just, keep, keeps, kept, kind, know, knows, knew, knowing, last, later, least, less, let, let's, like, likely, little, look, looked, looking, looks, made, make, makes, many, may, maybe, me, might, mine, more, most, mostly, much, must, my, myself, near, nearly, need, needed, needing, needs, never, new, next, no, nobody, none, noone, nor, not, nothing, now, of, off, often, old, on, once, one, only, onto, or, other, others, our, ours, ourselves, out, over, own, perhaps, please, put, puts, putting, quite, rather, really, right, said, same, say, says, saying, see, seeing, seem, seemed, seeming, seems, several, shall, she, she'd, she'll, she's, should, show, showed, showing, shows, since, so, some, somebody, someone, something, sometimes, somewhat, somewhere, still, such, take, taken, taking, tell, than, that, that's, the, their, theirs, them, themselves, then, there, there's, these, they, they'd, they'll, they're, they've, thing, things, think, thinking, this, those, though, through, thus, to, together, too, took, toward, towards, try, trying, turn, turning, turns, under, until, up, upon, us, use, used, using, very, want, wanted, wanting, wants, was, wasn't, way, we, we'd, we'll, we're, we've, well, were, weren't, what, whatever, when, whenever, where, wherever, whether, which, while, who, whoever, whom, whose, why, will, with, within, without, would, yes, yet, you, you'd, you'll, you're, you've, your, yours, yourself, yourselves";
 const STOP_WORDS = new Set(STOP_WORDS_RAW.split(',').map(w => w.trim().toLowerCase()));
-
-const ADVERB_EXCLUSIONS=new Set(['daily','early','only','family','friendly','lovely','likely','lively','lonely','ugly','silly'])
-const ADJECTIVE_WHITELIST=new Set(['big','small','little','happy','sad','angry','bright','dark','loud','quiet','clean','dirty','beautiful','ugly','gigantic','modern','green','red','brown','perfect','precious','polished','unconfident','huge','sweet','rough','thin','hard','cool'])
-const ADJECTIVE_SUFFIXES=['ous','ful','able','ible','al','ive','less','ish','ic','ary','ory','ent','ant','some','y']
 const CATEGORY_META={starter:{label:'Sentence starts',colour:'#9bc9ff'},auxiliary:{label:'Auxiliary verbs',colour:'#ffb7b7'},filter:{label:'Filter words',colour:'#d6b8ff'},adverb:{label:'Adverbs',colour:'#fff2a6'},basic:{label:'Basic words',colour:'#b9efb7'},repeat:{label:'Repeated key words',colour:'#ffd1a8'},adjective:{label:'Adjectives',colour:'#ff96cc'}}
 
 function updateTimerDisplay(){
@@ -324,16 +304,24 @@ function updateTimerDisplay(){
 function startTimer(){
   if(timerInterval) return;
   timerInterval = setInterval(()=>{
-    if(seconds>0) {
-      seconds--;
-      updateTimerDisplay();
-    } else {
-      clearInterval(timerInterval);
-    }
+    if(seconds>0) { seconds--; updateTimerDisplay(); } else { stopTimer(); }
   }, 1000);
 }
 
-if(hideTimeBtn) hideTimeBtn.onclick=()=>{timerVisible=!timerVisible;timerEl.classList.toggle('hidden',!timerVisible);hideTimeBtn.innerHTML=timerVisible?'Hide<br>time':'Show<br>time'}
+function stopTimer() { if (timerInterval) { clearInterval(timerInterval); timerInterval = null; } }
+
+hideTimeBtn.onclick=()=>{timerVisible=!timerVisible;timerEl.classList.toggle('hidden',!timerVisible);hideTimeBtn.innerHTML=timerVisible?'Hide<br>time':'Show<br>time'}
+
+// Toolbar Functionality
+document.querySelectorAll('#editorToolbar span').forEach(btn => {
+    btn.onclick = (e) => {
+        const cmd = btn.getAttribute('data-cmd');
+        if (cmd) {
+            document.execCommand(cmd, false, null);
+            writingArea.focus();
+        }
+    };
+});
 
 function loadPrompt(idx) {
   const p = PROMPTS[idx];
@@ -353,13 +341,15 @@ function countWords(text){const cleaned=text.replace(/\s+/g,' ').trim();return c
 function escapeHtml(str){return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
 function splitSentences(text){return text.match(/[^.!?\n]+[.!?]*|\n+/g)||[]}
 function getWordMatches(text){return text.match(/[A-Za-z']+/g)||[]}
-function isAdverb(word){return word.length>3&&/ly$/i.test(word)&&!ADVERB_EXCLUSIONS.has(word.toLowerCase())}
-function isAdjective(word){const lower=word.toLowerCase();if(ADJECTIVE_WHITELIST.has(lower)) return true;if(isAdverb(lower)) return false;return ADJECTIVE_SUFFIXES.some(s=>lower.length>s.length+2&&lower.endsWith(s))}
-function collectRepeatedWords(sentences){const repeated=new Set();const sentenceWords=sentences.map(sentence=>{const words=getWordMatches(sentence).map(w=>w.toLowerCase()).filter(w=>w.length>2&&!STOP_WORDS.has(w));const counts={};words.forEach(w=>counts[w]=(counts[w]||0)+1);Object.keys(counts).forEach(w=>{if(counts[w]>1) repeated.add(w)});return new Set(words)});for(let i=0;i<sentenceWords.length-1;i++){sentenceWords[i].forEach(w=>{if(sentenceWords[i+1].has(w)) repeated.add(w)})}return repeated}
+function isAdverb(word){return word.length>3&&/ly$/i.test(word)&&!new Set(['daily','early','only','family','friendly','lovely','likely','lively','lonely','ugly','silly']).has(word.toLowerCase())}
+function isAdjective(word){const lower=word.toLowerCase();if(new Set(['big','small','little','happy','sad','angry','bright','dark','loud','quiet','clean','dirty','beautiful','ugly','gigantic','modern','green','red','brown','perfect','precious','polished','unconfident','huge','sweet','rough','thin','hard','cool']).has(lower)) return true;if(isAdverb(lower)) return false;return ['ous','ful','able','ible','al','ive','less','ish','ic','ary','ory','ent','ant','some','y'].some(s=>lower.length>s.length+2&&lower.endsWith(s))}
 
 function analyseWriting(text){
   const sentences=splitSentences(text).filter(s=>s.length);
-  const repeatedWords=collectRepeatedWords(sentences);
+  const wordsForRepeats=(text.match(/[A-Za-z']+/g)||[]).map(w=>w.toLowerCase()).filter(w=>w.length>2&&!STOP_WORDS.has(w));
+  const counts_rep={}; wordsForRepeats.forEach(w=>counts_rep[w]=(counts_rep[w]||0)+1);
+  const repeatedWords=new Set(Object.keys(counts_rep).filter(w=>counts_rep[w]>2));
+  
   let totalWords=0; let adjectiveCount=0;
   const counts={starter:0,auxiliary:0,filter:0,adverb:0,basic:0,repeat:0,adjective:0,stop:0};
   let html='';
@@ -369,8 +359,7 @@ function analyseWriting(text){
     parts.forEach(part=>{
       if(/^\s+$/.test(part)){html+=part;return}
       if(/^[A-Za-z']+$/.test(part)){
-        const lower=part.toLowerCase();
-        totalWords++;
+        const lower=part.toLowerCase(); totalWords++;
         let cat='';
         const starterHit=!firstWordDone&&STARTER_WORDS.has(lower);
         const auxHit=AUX_WORDS.has(lower);
@@ -398,9 +387,7 @@ function analyseWriting(text){
     })
   });
   const adjP = totalWords?((adjectiveCount/totalWords)*100):0;
-  const stopP = totalWords?((counts.stop/totalWords)*100):0;
-  const status={starter:counts.starter<=3,auxiliary:counts.auxiliary<=Math.max(6,Math.round(totalWords*0.05)),filter:counts.filter<=Math.max(3,Math.round(totalWords*0.02)),adverb:counts.adverb<=Math.max(4,Math.round(totalWords*0.03)),basic:counts.basic<=Math.max(5,Math.round(totalWords*0.04)),repeat:counts.repeat<=Math.max(4,Math.round(totalWords*0.03)),adjective:adjP>=12,stop:stopP<=35};
-  return {html,counts,status,adjectivePercent:adjP,stopPercent:stopP,totalWords}
+  return {html,counts,adjectivePercent:adjP,stopPercent:totalWords?((counts.stop/totalWords)*100):0,totalWords}
 }
 
 function renderAnalysis(isRealtime = false){
@@ -412,21 +399,18 @@ function renderAnalysis(isRealtime = false){
   Object.keys(CATEGORY_META).forEach(key=>{
     const meta=CATEGORY_META[key];
     const countText=key==='adjective'?`${res.adjectivePercent.toFixed(1)}%`:`${res.counts[key]}`;
-    rows.push(`<label class="analysis-row"><input type="checkbox" data-cat="${key}" checked><span class="analysis-label"><span class="analysis-swatch" style="background:${meta.colour}"></span>${meta.label}</span><span class="analysis-count">${countText}</span><span class="analysis-light ${res.status[key]?'good':'bad'}"></span></label>`)
+    const isGood = key==='adjective'? res.adjectivePercent>=12 : res.counts[key]<=(res.totalWords*0.06);
+    rows.push(`<label class="analysis-row"><input type="checkbox" data-cat="${key}" checked><span class="analysis-label"><span class="analysis-swatch" style="background:${meta.colour}"></span>${meta.label}</span><span class="analysis-count">${countText}</span><span class="analysis-light ${isGood?'good':'bad'}"></span></label>`)
   });
-  rows.push(`<div class="analysis-row"><span></span><span class="analysis-label"><span class="analysis-swatch" style="background:#d7d7d7"></span>Stop words</span><span class="analysis-count">${res.stopPercent.toFixed(1)}%</span><span class="analysis-light ${res.status.stop?'good':'bad'}"></span></div>`);
+  rows.push(`<div class="analysis-row"><span></span><span class="analysis-label"><span class="analysis-swatch" style="background:#d7d7d7"></span>Stop words</span><span class="analysis-count">${res.stopPercent.toFixed(1)}%</span><span class="analysis-light ${res.stopPercent<=35?'good':'bad'}"></span></div>`);
   if(analysisGrid) analysisGrid.innerHTML=rows.join('');
-  if(analysisSummary) analysisSummary.textContent=`Adjectives: ${res.adjectivePercent.toFixed(1)}%. Stop words: ${res.stopPercent.toFixed(1)}%. Green lights mean okay.`;
 }
 
 function updateWordCount(){
   const total=countWords(writingArea.innerText);
   if(wordCount) {
     wordCount.textContent=total+' words';
-    wordCount.classList.remove('is-low','is-good','is-high');
-    if(total<300) wordCount.classList.add('is-low')
-    else if(total<=500) wordCount.classList.add('is-good')
-    else wordCount.classList.add('is-high')
+    wordCount.className = 'status ' + (total<300 ? 'is-low' : total<=500 ? 'is-good' : 'is-high');
   }
 }
 
@@ -439,76 +423,47 @@ function loadWriting(){
   }catch(e){}
 }
 
-loadPrompt(0);
-loadWriting();
+loadPrompt(0); loadWriting(); updateWordCount(); updateTimerDisplay();
 writingArea.addEventListener('input',()=>{updateWordCount();saveWriting()});
-updateWordCount();
-updateTimerDisplay();
 
 beginTestBtn.onclick=()=>{
-    const name = studentNameInput.value.trim();
-    const year = yearLevelSelect.value;
-    if (name || year) {
-        let headerTxt = "";
-        if (name && year) headerTxt = `${name} | Year ${year}`;
-        else if (name) headerTxt = name;
-        else headerTxt = `Year ${year}`;
-        mainHeaderTitle.textContent = headerTxt;
-    }
-    setupOverlay.style.display = 'none';
-    promptOverlay.classList.add('open');
-    startTimer();
+    const name = studentNameInput.value.trim(), year = yearLevelSelect.value;
+    if (name || year) mainHeaderTitle.textContent = (name && year) ? `${name} | Year ${year}` : (name || `Year ${year}`);
+    setupOverlay.style.display = 'none'; promptOverlay.classList.add('open'); startTimer();
 }
 
 promptBtn.onclick=()=>{finishOverlay.classList.remove('open');promptOverlay.classList.add('open')}
 nextPromptBtn.onclick=()=>{currentPromptIdx=(currentPromptIdx+1)%PROMPTS.length;loadPrompt(currentPromptIdx)}
 startWriting.onclick=()=>{
-    promptOverlay.classList.remove('open');
-    finishOverlay.classList.remove('open');
+    promptOverlay.classList.remove('open'); finishOverlay.classList.remove('open');
     if(writingArea.innerText.includes("Click Start writing")) writingArea.innerHTML="";
 }
-
 closePromptBtn.onclick=()=>{promptOverlay.classList.remove('open')}
-finishBtn.onclick=()=>{renderAnalysis();promptOverlay.classList.remove('open');finishOverlay.classList.add('open')}
-
-exitFinishBtn.onclick=()=>{
-    writingArea.innerText = analysisText.innerText;
-    finishOverlay.classList.remove('open');
-    updateWordCount();
-    saveWriting();
-}
+finishBtn.onclick=()=>{ stopTimer(); renderAnalysis(); promptOverlay.classList.remove('open'); finishOverlay.classList.add('open'); }
+exitFinishBtn.onclick=()=>{ writingArea.innerText = analysisText.innerText; finishOverlay.classList.remove('open'); updateWordCount(); saveWriting(); }
 
 copyTextBtn.onclick=()=>{
-    const el = document.createElement('textarea');
-    el.value = analysisText.innerText;
-    document.body.appendChild(el);
-    el.select();
-    document.execCommand('copy');
-    document.body.removeChild(el);
-    const originalText = copyTextBtn.innerText;
-    copyTextBtn.innerText = "✓ Copied!";
+    const el = document.createElement('textarea'); el.value = analysisText.innerText;
+    document.body.appendChild(el); el.select(); document.execCommand('copy'); document.body.removeChild(el);
+    const originalText = copyTextBtn.innerText; copyTextBtn.innerText = "✓ Copied!";
     setTimeout(() => { copyTextBtn.innerText = originalText; }, 2000);
 }
 
 analysisGrid.addEventListener('change',e=>{
-  const target=e.target;
-  if(!target||target.type!=='checkbox') return;
-  const cat=target.getAttribute('data-cat');
-  if(!cat) return;
+  const target=e.target; if(!target||target.type!=='checkbox') return;
+  const cat=target.getAttribute('data-cat'); if(!cat) return;
   analysisText.classList.toggle('hide-'+cat,!target.checked);
 })
 
 toggleStopBtn.onclick=()=>{
   stopMode = !stopMode;
   if(stopMode) {
-      analysisText.classList.add('stop-only');
-      analysisText.classList.remove('hide-stop');
+      analysisText.classList.add('stop-only'); analysisText.classList.remove('hide-stop');
       Object.keys(CATEGORY_META).forEach(key => analysisText.classList.add('hide-'+key));
       analysisGrid.querySelectorAll('input[type="checkbox"]').forEach(cb=>cb.checked=false);
       toggleStopBtn.innerText = "Restore Category Highlights";
   } else {
-      analysisText.classList.remove('stop-only');
-      analysisText.classList.add('hide-stop');
+      analysisText.classList.remove('stop-only'); analysisText.classList.add('hide-stop');
       Object.keys(CATEGORY_META).forEach(key => analysisText.classList.remove('hide-'+key));
       analysisGrid.querySelectorAll('input[type="checkbox"]').forEach(cb=>cb.checked=true);
       toggleStopBtn.innerText = "Reveal Stop Words Mode";
@@ -518,12 +473,10 @@ toggleStopBtn.onclick=()=>{
 let debounceTimer;
 analysisText.addEventListener('input', () => {
     clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(() => {
-        renderAnalysis(true); 
-    }, 500);
+    debounceTimer = setTimeout(() => { renderAnalysis(true); }, 500);
 });
 
-if(darkToggle){darkToggle.onclick=()=>{dark=!dark;document.body.classList.toggle('dark-mode',dark)}}
+darkToggle.onclick=()=>{dark=!dark;document.body.classList.toggle('dark-mode',dark)}
 window.addEventListener('beforeunload',saveWriting)
 </script>
 </body>
