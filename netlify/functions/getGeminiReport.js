@@ -42,25 +42,42 @@ Return ONLY valid JSON in this exact shape:
 
   const userPrompt = `Student: ${name || 'Unknown'}\nYear: ${year || 'Unknown'}\nTopic: ${topic || 'Unknown'}\nText:\n${text}`;
 
-  // 4. Call Gemini (Using built-in fetch)
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=${apiKey}`;
+  // 4. Call Gemini (Using built-in fetch with Retry Logic)
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+
+  let response;
+  let retries = 3;
+  let delay = 2000; // Start with a 2-second delay
 
   try {
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: userPrompt }] }],
-        systemInstruction: { parts: [{ text: systemInstruction }] },
-        generationConfig: { responseMimeType: "application/json", temperature: 0.2 }
-      })
-    });
+    for (let i = 0; i < retries; i++) {
+      response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: userPrompt }] }],
+          systemInstruction: { parts: [{ text: systemInstruction }] },
+          generationConfig: { responseMimeType: "application/json", temperature: 0.2 }
+        })
+      });
+
+      // If we hit the rate limit (429), wait and try again
+      if (response.status === 429) {
+        if (i === retries - 1) {
+          throw new Error("Too many students are submitting at once. Please wait a moment and click get marking again.");
+        }
+        await new Promise(res => setTimeout(res, delay));
+        delay *= 2; // Exponential backoff (2s, 4s...)
+      } else {
+        break; // Success or a non-rate-limit error, break out of the retry loop
+      }
+    }
 
     const data = await response.json();
     
     // Extract the text from Gemini response
     const resultText = data.candidates?.[0]?.content?.parts?.[0]?.text;
-    if (!resultText) throw new Error("No response from AI");
+    if (!resultText) throw new Error(data.error?.message || "No response from AI");
 
     // Return the JSON directly to the frontend
     return {
