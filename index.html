@@ -41,15 +41,15 @@ body{margin:0;background:#dfe5ef;font-family:Arial, Helvetica, sans-serif;displa
 .toolbar span:hover{background:#f0f2f5;color:var(--nap-blue)}
 .toolbar span:active{background:#e2e8f0}
 
-/* Bulletproof Scrolling Wrapper */
+/* Scrolling Text Area */
 .editor-scroll { flex:1; min-height:0; overflow-y:auto; padding: 16px; background:#fff; }
 .text-area { min-height: 100%; font-size:16px; line-height:1.5; color:#62666d; outline:none; white-space:pre-wrap; word-wrap: break-word; -webkit-font-smoothing: antialiased; }
 
 .footer{height:66px;border-top:1px solid #d9deea;background:#fff;position:relative;flex:0 0 66px;display:flex;align-items:center;justify-content:space-between;padding:0 15px}
-.btn{width:150px;height:44px;border:0;color:#fff;font-size:16px;font-weight:700;cursor:pointer;background:linear-gradient(180deg,#5177d7 0%, #3d64c7 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,0.2); border-radius:6px;transition:opacity 0.2s;}.btn:hover{opacity:0.9}
+.btn{width:150px;height:44px;border:0;color:#fff;font-size:16px;font-weight:700;cursor:pointer;background:linear-gradient(180deg,#5177d7 0%, #3d64c7 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,0.2); border-radius:6px;transition:all 0.2s;}.btn:hover:not(:disabled){opacity:0.9}.btn:disabled{opacity:0.7;cursor:not-allowed}
 .status{color:#616b7d;font-weight:700;font-size:13px;text-align:center;flex:1}.status.is-low{color:#616b7d}.status.is-good{color:#2d8a4b}.status.is-high{color:#c0392b}
 
-/* Registration Screen Overlay */
+/* Registration Overlay */
 .setup-overlay{position:absolute;inset:0;background:#fff;z-index:20;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:20px}
 .setup-card{width:100%;max-width:400px;padding:25px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05)}
 .setup-logo{font-size:28px;font-weight:800;color:var(--nap-blue);margin-bottom:8px;letter-spacing:-0.02em}
@@ -58,23 +58,20 @@ body{margin:0;background:#dfe5ef;font-family:Arial, Helvetica, sans-serif;displa
 
 .prompt-overlay{position:absolute;inset:56px 0 0 0;background:#fff;display:none;z-index:8}.prompt-overlay.open{display:flex;flex-direction:column}
 .audio-strip{height:34px;background:linear-gradient(180deg,#4671d1 0%, #3560c1 100%);border-bottom:1px solid #6e89cb;position:relative;flex:0 0 34px}
+.audio-close{position:absolute;right:10px;top:-29px;width:28px;height:28px;color:#dfe8ff;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;cursor:pointer}
 .audio-icons{position:absolute;left:12px;top:8px;display:flex;align-items:center;gap:16px;color:#eef3ff;font-size:16px}
 .audio-progress{position:absolute;left:95px;right:118px;top:13px;height:6px;border-radius:4px;background:rgba(255,255,255,0.24);box-shadow:inset 0 1px 0 rgba(0,0,0,0.1)}.audio-progress::after{content:"";position:absolute;left:0;top:0;width:0%;height:100%;border-radius:4px;background:#dfe8ff}
 .audio-dot{position:absolute;left:78px;top:10px;width:10px;height:10px;border-radius:50%;background:#f3f6ff}
 .audio-time{position:absolute;right:12px;top:7px;color:#f0f3fb;font-size:13px;font-weight:700}
-.audio-close{position:absolute;right:10px;top:-29px;width:28px;height:28px;color:#dfe8ff;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;cursor:pointer}
 
 .prompt-body{flex:1;min-height:0;padding:20px 24px;display:grid;grid-template-columns:40px 1fr 42%;gap:24px;overflow:hidden}
 .prompt-band{background:#f3eadc;border-radius:4px}
 .prompt-left{padding:0 10px 15px 0;color:#4a4f59;overflow-y:auto;min-height:0}
 .prompt-title{font-size:22px;font-weight:800;color:#3b4051;margin:0 0 12px}
 .prompt-text{font-size:15px;line-height:1.45;margin-bottom:12px;color:#4a5568}.prompt-section{margin-top:14px}.prompt-section-title{font-size:15px;font-weight:700;margin-bottom:6px;color:#35425d}.prompt-list{margin:0;padding-left:18px;font-size:14px;line-height:1.5}
-
-/* Fixed Fluid Image Placement - Shrink wraps the portrait image properly */
 .prompt-right{display:flex;align-items:flex-start;justify-content:center;height:100%;min-height:0;overflow:hidden}
 .mosaic-container{width:100%;height:100%;display:flex;align-items:flex-start;justify-content:center}
 .mosaic-img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;display:block;border-radius:10px;box-shadow: 0 4px 12px rgba(0,0,0,0.06);border:1px solid #e1e5eb;background:#f7f9fb}
-
 .prompt-nav-bar{height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;border-top:1px solid #eee;flex:0 0 56px}
 .change-prompt-btn{cursor:pointer;background:#f0f2f5;padding:8px 16px;border-radius:6px;font-size:13px;font-weight:700;color:#3f67c8;border:1px solid #d5dcea}
 .start-bar{width:180px;height:44px;background:linear-gradient(180deg,#567cdb 0%, #3e66c9 100%);color:#fff;display:flex;align-items:center;justify-content:center;gap:10px;font-size:16px;font-weight:700;cursor:pointer;border-radius:6px;box-shadow: 0 2px 8px rgba(62,102,201,0.2)}
@@ -83,7 +80,7 @@ body{margin:0;background:#dfe5ef;font-family:Arial, Helvetica, sans-serif;displa
 .entry-label{font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.04em}
 .entry-input, .entry-select{height:40px;padding:0 10px;border:1px solid #cbd5e1;border-radius:8px;font-size:14px;color:#1e293b;outline:none;background:#fff}
 
-/* Polish Overlay */
+/* Finish Overlay */
 .finish-overlay{position:absolute;inset:56px 0 0 0;background:#fff;display:none;z-index:9}.finish-overlay.open{display:block}
 .finish-inner{height:100%;display:grid;grid-template-columns:300px 1fr;gap:20px;padding:20px;text-align:left;overflow:hidden}
 .finish-sidebar{border:1px solid #d7dbe4;background:#f7f9fc;padding:15px;display:flex;flex-direction:column;overflow-y:auto;min-height:0}
@@ -91,11 +88,17 @@ body{margin:0;background:#dfe5ef;font-family:Arial, Helvetica, sans-serif;displa
 
 .finish-title{font-size:20px;font-weight:700;color:#3b4051;margin-bottom:5px}.finish-copy{font-size:13px;color:#5a6374;line-height:1.3}.finish-meta{font-size:15px;font-weight:700;color:#4b5870;margin:10px 0}
 .finish-actions{display:flex;flex-direction:column;gap:8px;margin-top:auto;padding-top:15px}
-.finish-btn{width:100%;height:44px;border:0;padding:0 18px;color:#fff;font-size:16px;font-weight:700;cursor:pointer;background:linear-gradient(180deg,#5177d7 0%, #3d64c7 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,0.2);border-radius:6px}
+.finish-btn{width:100%;height:44px;border:0;padding:0 18px;color:#fff;font-size:16px;font-weight:700;cursor:pointer;background:linear-gradient(180deg,#5177d7 0%, #3d64c7 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,0.2);border-radius:6px; display:flex; align-items:center; justify-content:center; transition: all 0.2s;}
+.finish-btn:disabled { opacity: 0.8; cursor: wait; }
 .finish-btn-alt{width:100%;height:40px;border:1px solid #d5dcea;background:#fff;color:var(--nap-blue);font-weight:700;cursor:pointer;border-radius:6px}
+
+.api-error-msg { color: #c0392b; font-size: 13px; font-weight: 600; text-align: center; display: none; margin-bottom: 8px; word-break: break-word;}
+
+/* Analysis Display */
 .analysis-grid{display:flex;flex-direction:column;gap:5px;margin-bottom:10px}
 .analysis-row{display:grid;grid-template-columns:20px 1fr auto 18px;align-items:center;gap:6px;font-size:12px;color:#4b5870;background:#fff;padding:6px 8px;border:1px solid #e9ecf1;border-radius:4px}
 .analysis-light{width:10px;height:10px;border-radius:50%;display:inline-block}.analysis-light.good{background:#31a24c}.analysis-light.bad{background:#cf3d32}
+.analysis-swatch{width:12px;height:12px;display:inline-block;margin-right:8px;border-radius:2px;vertical-align:middle;}
 .analysis-text{font-size:17px;line-height:1.7;color:#3f4653;white-space:pre-wrap;outline:none;min-height:100%; word-wrap: break-word;}.analysis-text .hl{padding:1px 2px;border-radius:3px}
 
 .analysis-text .hl-starter{background:#9bc9ff !important} 
@@ -111,39 +114,39 @@ body{margin:0;background:#dfe5ef;font-family:Arial, Helvetica, sans-serif;displa
 .analysis-text.hide-stop .hl-stop { background: transparent; }
 .analysis-text.stop-only .hl:not(.hl-stop) { background: transparent !important; padding: 0 !important; }
 
-.analysis-text.hide-starter .hl-starter, .analysis-text.hide-auxiliary .hl-auxiliary, 
-.analysis-text.hide-filter .hl-filter, .analysis-text.hide-adverb .hl-adverb, 
-.analysis-text.hide-basic .hl-basic, .analysis-text.hide-repeat .hl-repeat, 
-.analysis-text.hide-adjective .hl-adjective { background: transparent !important; padding: 0 !important; }
+/* Report Card Overlay */
+.report-overlay { position:absolute; inset:0; background:rgba(255,255,255,0.92); z-index:30; display:none; align-items:center; justify-content:center; padding:20px; backdrop-filter:blur(4px); }
+.report-overlay.open { display:flex; }
+.report-card { background:#fff; width:100%; max-width:760px; max-height:95%; display:flex; flex-direction:column; border-radius:12px; box-shadow:0 25px 50px -12px rgba(0,0,0,0.25); border:1px solid #d5dcea; overflow:hidden; }
+.report-header { display:flex; align-items:center; justify-content:space-between; padding:20px 24px; border-bottom:1px solid #e2e8f0; background:#f8fafc; }
+.report-body { flex:1; min-height:0; overflow-y:auto; padding:20px 24px; display:flex; flex-direction:column; gap:12px; background:#fbfdff; }
+.criterion-row { display:grid; grid-template-columns: 70px 1fr; gap:16px; padding:14px; background:#fff; border:1px solid #edf2f7; border-radius:8px; align-items:center; box-shadow:0 2px 4px rgba(0,0,0,0.02);}
+.criterion-score { font-size:26px; font-weight:800; color:#3158b5; text-align:center; background:#f1f5f9; padding:10px 0; border-radius:8px;}
+.criterion-score small { font-size:12px; color:#64748b; display:block; font-weight:700;}
+.criterion-content h4 { margin:0 0 4px 0; font-size:15px; color:#1e293b;}
+.criterion-content p { margin:0; font-size:13px; color:#475569; line-height:1.4;}
 
-.hidden{visibility:hidden}
+.report-improvement { background: #eff6ff; border-left: 4px solid var(--nap-blue); padding: 12px 16px; margin-bottom: 8px; border-radius: 4px; color: #1e293b; font-size: 14px; line-height: 1.5; }
+.report-improvement strong { color: var(--nap-blue-dark); display: block; margin-bottom: 2px; font-size: 15px; }
+.report-actions-bar { display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; border-top: 1px solid #e2e8f0; background: #f8fafc; }
+.report-actions-left { display: flex; gap: 10px; }
+.btn-secondary { height: 44px; padding: 0 16px; background: #fff; border: 1px solid #cbd5e1; border-radius: 6px; color: #475569; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+.btn-secondary:hover { background: #f1f5f9; color: #1e293b; }
 
-/* Dark Mode including custom scrollbars */
+/* Dark Mode Extensions */
 .dark-mode .content,.dark-mode .editor,.dark-mode .footer,.dark-mode .app, .dark-mode .setup-overlay{background:#2f3c4f}
 .dark-mode .setup-card, .dark-mode .finish-sidebar, .dark-mode .finish-main{background:#34465d; border-color:#445a77}
-.dark-mode .editor-scroll { background:#2d3748; }
-.dark-mode .setup-title, .dark-mode .entry-label, .dark-mode .instruction, .dark-mode .prompt-left, .dark-mode .finish-copy, .dark-mode .finish-meta{color:#e6edf7}
 .dark-mode .text-area, .dark-mode .entry-input, .dark-mode .entry-select, .dark-mode .analysis-row{background:transparent; color:#ffffff; border-color:#445a77}
-.dark-mode .toolbar, .dark-mode .header, .dark-mode .prompt-nav-bar{background:#34465d; color:#ffffff; border-bottom:1px solid #445a77}
-.dark-mode .prompt-title,.dark-mode .prompt-text,.dark-mode .prompt-list,.dark-mode .prompt-section-title,.dark-mode .task-title,.dark-mode .finish-title,.dark-mode .status,.dark-mode .analysis-row,.dark-mode .analysis-count,.dark-mode .analysis-summary,.dark-mode .analysis-text{color:#ffffff}
-.dark-mode .mosaic-img{background:#1c2635; border-color:#34465d;} /* Fixed Dark mode for Image border */
+.dark-mode .report-card { background:#2d3748; border-color:#445a77; }
+.dark-mode .report-header { background:#1e293b; border-color:#445a77; }
+.dark-mode .report-body { background:#2d3748; }
+.dark-mode .criterion-row { background:#34465d; border-color:#445a77; }
+.dark-mode .criterion-score { background:#1e293b; color:#93c5fd; }
+.dark-mode .report-improvement { background: rgba(59, 130, 246, 0.1); border-color: #60a5fa; color: #e2e8f0; }
 
-.dark-mode ::-webkit-scrollbar-track { background: rgba(255,255,255,0.02); }
-.dark-mode ::-webkit-scrollbar-thumb { background-color: rgba(255,255,255,0.15); }
-.dark-mode ::-webkit-scrollbar-thumb:hover { background-color: rgba(255,255,255,0.25); }
-
-@media (max-width:820px){
-    body{align-items:stretch;justify-content:stretch}.app{border-radius:0}
-    .header-left,.header-right{width:22%}
-    .task-title{font-size:15px}.timer{left:10px;font-size:15px}.pill.one{left:75px;width:38px}
-    .pill.two{left:118px;width:38px}
-    .prompt-body{grid-template-columns: 20px 1fr; grid-template-rows: auto auto; height: calc(100% - 110px); padding: 15px;}
-    .prompt-band{grid-row: 1 / span 2}
-    .prompt-right{grid-row: 2; grid-column: 2; padding: 10px 0;}
-    .mosaic-container{max-height: 250px;}
-    .finish-inner{grid-template-columns: 1fr; grid-template-rows: auto 1fr;}
-    .finish-main{order: 1; height: 40vh;}
-}
+/* Loading Spinner */
+.spinner { border: 3px solid rgba(255,255,255,0.3); border-radius: 50%; border-top: 3px solid #fff; width: 18px; height: 18px; animation: spin 1s linear infinite; margin-right: 8px; display: none; }
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 </style>
 </head>
 <body>
@@ -191,7 +194,6 @@ body{margin:0;background:#dfe5ef;font-family:Arial, Helvetica, sans-serif;displa
           <span data-cmd="italic" style="font-style:italic">I</span>
           <span data-cmd="underline" style="text-decoration:underline">U</span>
         </div>
-        <!-- Wraps the text area to guarantee scrollbar appears here -->
         <div class="editor-scroll">
           <div class="text-area" id="writingArea" contenteditable="true" spellcheck="true"></div>
         </div>
@@ -204,6 +206,7 @@ body{margin:0;background:#dfe5ef;font-family:Arial, Helvetica, sans-serif;displa
       <button class="btn right" id="finishBtn">Finish&nbsp;&nbsp;›</button>
     </div>
 
+    <!-- Overlays -->
     <div class="prompt-overlay" id="promptOverlay">
       <div class="audio-strip">
         <div class="audio-close" id="closePromptBtn">✕</div>
@@ -212,9 +215,9 @@ body{margin:0;background:#dfe5ef;font-family:Arial, Helvetica, sans-serif;displa
         <div class="audio-progress"></div>
         <div class="audio-time">0:00 &nbsp;/&nbsp; 1:10</div>
       </div>
-      <div class="prompt-body" id="promptBody">
+      <div class="prompt-body">
         <div class="prompt-band"></div>
-        <div class="prompt-left" id="promptContentLeft">
+        <div class="prompt-left">
           <div class="prompt-title" id="pTitle"></div>
           <div class="prompt-text" id="pLine1"></div>
           <div class="prompt-text" id="pLine2"></div>
@@ -251,19 +254,49 @@ body{margin:0;background:#dfe5ef;font-family:Arial, Helvetica, sans-serif;displa
           <div class="finish-copy">Edit your text directly on the right. Feedback updates in real-time.</div>
           <div class="finish-meta" id="finishMeta">0 words written</div>
           <div class="analysis-grid" id="analysisGrid"></div>
-          <div class="analysis-summary" id="analysisSummary"></div>
-          <div class="stop-actions"><button class="stop-btn" id="toggleStopBtn">Reveal Stop Words Mode</button></div>
+          <div class="stop-actions"><button class="btn-secondary" style="width:100%;font-size:12px;margin-bottom:10px" id="toggleStopBtn">Reveal Stop Words Mode</button></div>
           <div class="finish-actions">
+            <div id="apiErrorMsg" class="api-error-msg"></div>
             <button class="finish-btn-alt" id="copyTextBtn">Copy Text</button>
-            <button class="finish-btn" id="exitFinishBtn">Get My Report</button>
+            <button class="finish-btn" id="getReportBtn"><div class="spinner" id="btnSpinner"></div><span id="btnText">Get My Report</span></button>
           </div>
         </div>
         <div class="finish-main"><div class="analysis-text hide-stop" id="analysisText" contenteditable="true" spellcheck="true"></div></div>
       </div>
     </div>
+
+    <!-- Report Overlay -->
+    <div class="report-overlay" id="reportOverlay">
+      <div class="report-card">
+        <div class="report-header">
+          <div>
+            <h2 id="reportName" style="margin:0;color:var(--nap-blue);">Candidate</h2>
+            <div id="reportYear" style="color:#64748b;font-size:14px;font-weight:700;margin-top:4px;">Year Level</div>
+          </div>
+          <div style="text-align:right;">
+            <span id="reportTotalScore" style="font-size:36px;font-weight:800;color:var(--nap-blue-dark);">0</span>
+            <span style="font-size:18px;color:#94a3b8;font-weight:700;">/ 47</span>
+          </div>
+        </div>
+        <div class="report-body">
+          <div id="reportImprovement" class="report-improvement"></div>
+          <div id="reportCriteriaList"></div>
+        </div>
+        <div class="report-actions-bar">
+          <div class="report-actions-left">
+            <button class="btn-secondary" id="emailReportBtn">Email Report</button>
+            <button class="btn-secondary" id="downloadReportBtn">Download (.txt)</button>
+          </div>
+          <button class="begin-btn" id="closeReportBtn" style="margin:0; width:160px; height:44px;">Close Report</button>
+        </div>
+      </div>
+    </div>
   </div>
 
 <script>
+// GEMINI API KEY SETUP
+const apiKey = "AIzaSyBMIuzfjFgXUNpTSqt6rZ1UXNzuNedY98o"; 
+
 const PROMPTS = [
   {title: "The Net", line1: "Write a narrative (story) that includes the idea of a net.", line2: "Something stuck, a rescue, or a complex web of events.", line3: "You can use an idea on this prompt or your own idea about a net.", thinkAbout: ["the characters and where they are", "the complication or problem to be solved", "how the story will end"], img: "thenet.jpeg"},
   {title: "The Secret Door", line1: "Write a story about discovering a secret door where it shouldn't be.", line2: "Perhaps it is hidden behind a bookshelf, buried in a garden, or appears only at midnight. Where does it lead?", line3: "Focus on the suspense and the wonder of discovery.", thinkAbout: ["the mysterious appearance of the door", "the feeling of turning the handle", "what lies on the other side"], img: "thesecretdoor.jpeg"},
@@ -278,16 +311,20 @@ const PROMPTS = [
 ];
 
 let currentPromptIdx = 0;
+let lastReportData = null;
 const timerEl=document.getElementById('timer'), hideTimeBtn=document.getElementById('hideTimeBtn'), darkToggle=document.getElementById('darkToggle');
 const promptBtn=document.getElementById('promptBtn'), promptOverlay=document.getElementById('promptOverlay'), startWriting=document.getElementById('startWriting');
 const nextPromptBtn=document.getElementById('nextPromptBtn'), closePromptBtn=document.getElementById('closePromptBtn');
 const writingArea=document.getElementById('writingArea'), wordCount=document.getElementById('wordCount');
 const finishBtn=document.getElementById('finishBtn'), finishOverlay=document.getElementById('finishOverlay'), finishMeta=document.getElementById('finishMeta');
-const exitFinishBtn=document.getElementById('exitFinishBtn'), copyTextBtn=document.getElementById('copyTextBtn');
-const analysisGrid=document.getElementById('analysisGrid'), analysisSummary=document.getElementById('analysisSummary'), analysisText=document.getElementById('analysisText');
+const getReportBtn=document.getElementById('getReportBtn'), copyTextBtn=document.getElementById('copyTextBtn');
+const analysisGrid=document.getElementById('analysisGrid'), analysisText=document.getElementById('analysisText');
 const toggleStopBtn=document.getElementById('toggleStopBtn'), mosaicImg=document.getElementById('mosaicImg');
 const studentNameInput=document.getElementById('studentName'), yearLevelSelect=document.getElementById('yearLevel'), mainHeaderTitle=document.getElementById('mainHeaderTitle');
 const beginTestBtn=document.getElementById('beginTestBtn'), setupOverlay=document.getElementById('setupOverlay');
+const reportOverlay=document.getElementById('reportOverlay'), closeReportBtn=document.getElementById('closeReportBtn');
+const emailReportBtn=document.getElementById('emailReportBtn'), downloadReportBtn=document.getElementById('downloadReportBtn');
+const apiErrorMsg=document.getElementById('apiErrorMsg');
 
 let seconds=42*60, timerVisible=true, dark=false, stopMode = false, timerInterval = null;
 const STORAGE_KEY='prompt-writer-autosave'
@@ -305,27 +342,20 @@ function updateTimerDisplay(){
   const secs=String(seconds%60).padStart(2,'0');
   if(timerEl) timerEl.innerHTML=`${mins}:${secs}<small>Hours&nbsp;&nbsp;&nbsp;Mins</small>`;
 }
-
 function startTimer(){
   if(timerInterval) return;
-  timerInterval = setInterval(()=>{
-    if(seconds>0) { seconds--; updateTimerDisplay(); } else { stopTimer(); }
-  }, 1000);
+  timerInterval = setInterval(()=>{ if(seconds>0){seconds--;updateTimerDisplay()}else{stopTimer()} }, 1000);
 }
-
-function stopTimer() { if (timerInterval) { clearInterval(timerInterval); timerInterval = null; } }
+function stopTimer(){ if(timerInterval){clearInterval(timerInterval);timerInterval=null;} }
 
 hideTimeBtn.onclick=()=>{timerVisible=!timerVisible;timerEl.classList.toggle('hidden',!timerVisible);hideTimeBtn.innerHTML=timerVisible?'Hide<br>time':'Show<br>time'}
+darkToggle.onclick=()=>{dark=!dark;document.body.classList.toggle('dark-mode',dark)}
 
-// Toolbar Functionality
 document.querySelectorAll('#editorToolbar span').forEach(btn => {
-    btn.onclick = (e) => {
-        const cmd = btn.getAttribute('data-cmd');
-        if (cmd) {
-            document.execCommand(cmd, false, null);
-            writingArea.focus();
-        }
-    };
+  btn.onclick = (e) => {
+    const cmd = btn.getAttribute('data-cmd');
+    if(cmd){ document.execCommand(cmd, false, null); writingArea.focus(); }
+  };
 });
 
 function loadPrompt(idx) {
@@ -344,18 +374,15 @@ function loadPrompt(idx) {
 
 function countWords(text){const cleaned=text.replace(/\s+/g,' ').trim();return cleaned?cleaned.split(' ').length:0}
 function escapeHtml(str){return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
-function splitSentences(text){return text.match(/[^.!?\n]+[.!?]*|\n+/g)||[]}
-function getWordMatches(text){return text.match(/[A-Za-z']+/g)||[]}
 function isAdverb(word){return word.length>3&&/ly$/i.test(word)&&!new Set(['daily','early','only','family','friendly','lovely','likely','lively','lonely','ugly','silly']).has(word.toLowerCase())}
-function isAdjective(word){const lower=word.toLowerCase();if(new Set(['big','small','little','happy','sad','angry','bright','dark','loud','quiet','clean','dirty','beautiful','ugly','gigantic','modern','green','red','brown','perfect','precious','polished','unconfident','huge','sweet','rough','thin','hard','cool']).has(lower)) return true;if(isAdverb(lower)) return false;return ['ous','ful','able','ible','al','ive','less','ish','ic','ary','ory','ent','ant','some','y'].some(s=>lower.length>s.length+2&&lower.endsWith(s))}
+function isAdjective(word){const lower=word.toLowerCase();if(new Set(['big','small','little','happy','sad','angry','bright','dark','loud','quiet','clean','dirty','beautiful','ugly','gigantic','modern','green','red','brown','perfect','precious','huge','sweet','rough','thin','hard','cool']).has(lower))return true;if(isAdverb(lower))return false;return ['ous','ful','able','ible','al','ive','less','ish','ic','ary','ory','ent','ant','some','y'].some(s=>lower.length>s.length+2&&lower.endsWith(s))}
 
 function analyseWriting(text){
-  const sentences=splitSentences(text).filter(s=>s.length);
+  const sentences=(text.match(/[^.!?\n]+[.!?]*|\n+/g)||[]).filter(s=>s.length);
   const wordsForRepeats=(text.match(/[A-Za-z']+/g)||[]).map(w=>w.toLowerCase()).filter(w=>w.length>2&&!STOP_WORDS.has(w));
   const counts_rep={}; wordsForRepeats.forEach(w=>counts_rep[w]=(counts_rep[w]||0)+1);
   const repeatedWords=new Set(Object.keys(counts_rep).filter(w=>counts_rep[w]>2));
-  
-  let totalWords=0; let adjectiveCount=0;
+  let totalWords=0, adjectiveCount=0;
   const counts={starter:0,auxiliary:0,filter:0,adverb:0,basic:0,repeat:0,adjective:0,stop:0};
   let html='';
   sentences.forEach(sentence=>{
@@ -367,13 +394,7 @@ function analyseWriting(text){
         const lower=part.toLowerCase(); totalWords++;
         let cat='';
         const starterHit=!firstWordDone&&STARTER_WORDS.has(lower);
-        const auxHit=AUX_WORDS.has(lower);
-        const filterHit=FILTER_WORDS.has(lower);
-        const adverbHit=isAdverb(lower);
-        const basicHit=BASIC_WORDS.has(lower);
-        const repeatHit=repeatedWords.has(lower);
-        const adjectiveHit=isAdjective(lower);
-        const stopHit=STOP_WORDS.has(lower);
+        const auxHit=AUX_WORDS.has(lower), filterHit=FILTER_WORDS.has(lower), adverbHit=isAdverb(lower), basicHit=BASIC_WORDS.has(lower), repeatHit=repeatedWords.has(lower), adjectiveHit=isAdjective(lower), stopHit=STOP_WORDS.has(lower);
         if(starterHit){cat='starter';counts.starter++}
         else if(auxHit){cat='auxiliary';counts.auxiliary++}
         else if(filterHit){cat='filter';counts.filter++}
@@ -383,16 +404,13 @@ function analyseWriting(text){
         else if(adjectiveHit){cat='adjective';counts.adjective++}
         if(adjectiveHit) adjectiveCount++;
         if(stopHit) counts.stop++;
-        const classes=[];
-        if(cat) classes.push(`hl-${cat}`);
-        if(stopHit) classes.push('hl-stop');
+        const classes=[]; if(cat) classes.push(`hl-${cat}`); if(stopHit) classes.push('hl-stop');
         html+=classes.length?`<span class="hl ${classes.join(' ')}">${escapeHtml(part)}</span>`:escapeHtml(part);
         firstWordDone=true
       }else{html+=escapeHtml(part)}
     })
   });
-  const adjP = totalWords?((adjectiveCount/totalWords)*100):0;
-  return {html,counts,adjectivePercent:adjP,stopPercent:totalWords?((counts.stop/totalWords)*100):0,totalWords}
+  return {html,counts,adjectivePercent:totalWords?((adjectiveCount/totalWords)*100):0,stopPercent:totalWords?((counts.stop/totalWords)*100):0,totalWords}
 }
 
 function renderAnalysis(isRealtime = false){
@@ -421,22 +439,15 @@ function updateWordCount(){
 
 function saveWriting(){try{localStorage.setItem(STORAGE_KEY,writingArea.innerHTML)}catch(e){}}
 function loadWriting(){
-  try{
-    const saved=localStorage.getItem(STORAGE_KEY);
-    if(saved){writingArea.innerHTML=saved}
-    else {writingArea.innerHTML = "Click Start writing above to see the prompt and begin your story...";}
-  }catch(e){}
+  try{ const saved=localStorage.getItem(STORAGE_KEY); if(saved){writingArea.innerHTML=saved} }catch(e){}
 }
 
-loadPrompt(0); loadWriting(); updateWordCount(); updateTimerDisplay();
-writingArea.addEventListener('input',()=>{updateWordCount();saveWriting()});
-
+// ---- Navigation Actions ----
 beginTestBtn.onclick=()=>{
     const name = studentNameInput.value.trim(), year = yearLevelSelect.value;
     if (name || year) mainHeaderTitle.textContent = (name && year) ? `${name} | Year ${year}` : (name || `Year ${year}`);
     setupOverlay.style.display = 'none'; promptOverlay.classList.add('open'); startTimer();
 }
-
 promptBtn.onclick=()=>{finishOverlay.classList.remove('open');promptOverlay.classList.add('open')}
 nextPromptBtn.onclick=()=>{currentPromptIdx=(currentPromptIdx+1)%PROMPTS.length;loadPrompt(currentPromptIdx)}
 startWriting.onclick=()=>{
@@ -445,19 +456,16 @@ startWriting.onclick=()=>{
 }
 closePromptBtn.onclick=()=>{promptOverlay.classList.remove('open')}
 finishBtn.onclick=()=>{ stopTimer(); renderAnalysis(); promptOverlay.classList.remove('open'); finishOverlay.classList.add('open'); }
-exitFinishBtn.onclick=()=>{ writingArea.innerText = analysisText.innerText; finishOverlay.classList.remove('open'); updateWordCount(); saveWriting(); }
 
 copyTextBtn.onclick=()=>{
     const el = document.createElement('textarea'); el.value = analysisText.innerText;
     document.body.appendChild(el); el.select(); document.execCommand('copy'); document.body.removeChild(el);
-    const originalText = copyTextBtn.innerText; copyTextBtn.innerText = "✓ Copied!";
-    setTimeout(() => { copyTextBtn.innerText = originalText; }, 2000);
+    copyTextBtn.innerText = "✓ Copied!"; setTimeout(() => { copyTextBtn.innerText = "Copy Text"; }, 2000);
 }
 
 analysisGrid.addEventListener('change',e=>{
   const target=e.target; if(!target||target.type!=='checkbox') return;
-  const cat=target.getAttribute('data-cat'); if(!cat) return;
-  analysisText.classList.toggle('hide-'+cat,!target.checked);
+  const cat=target.getAttribute('data-cat'); if(cat) analysisText.classList.toggle('hide-'+cat,!target.checked);
 })
 
 toggleStopBtn.onclick=()=>{
@@ -466,7 +474,7 @@ toggleStopBtn.onclick=()=>{
       analysisText.classList.add('stop-only'); analysisText.classList.remove('hide-stop');
       Object.keys(CATEGORY_META).forEach(key => analysisText.classList.add('hide-'+key));
       analysisGrid.querySelectorAll('input[type="checkbox"]').forEach(cb=>cb.checked=false);
-      toggleStopBtn.innerText = "Restore Category Highlights";
+      toggleStopBtn.innerText = "Restore Highlights";
   } else {
       analysisText.classList.remove('stop-only'); analysisText.classList.add('hide-stop');
       Object.keys(CATEGORY_META).forEach(key => analysisText.classList.remove('hide-'+key));
@@ -475,14 +483,128 @@ toggleStopBtn.onclick=()=>{
   }
 }
 
-let debounceTimer;
-analysisText.addEventListener('input', () => {
-    clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(() => { renderAnalysis(true); }, 500);
-});
+// ---- Gemini API Implementation ----
+async function fetchGeminiReportWithRetry(text, name, year, topic, retries = 5) {
+    // Longer delays specifically to handle HTTP 429 Rate Limiting
+    const delays = [2000, 4000, 8000, 16000, 25000];
+const url = \https://www.google.com/search?q=https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent%3Fkey%3D${apiKey}`;`
+    const systemInstruction = `You are an expert NAPLAN marking teacher. Grade the student's narrative text using the 'Narrative marking guide'. 
+Criteria (Max Score): Audience (6), Text Structure (4), Ideas (5), Character & Setting (4), Vocabulary (5), Cohesion (4), Paragraphing (2), Sentence Structure (6), Punctuation (5), Spelling (6). Total out of 47.
+Provide ONLY valid JSON: { "totalScore": int, "improvementComment": "string", "criteria": [{ "name": "string", "score": int, "maxScore": int, "feedback": "string" }] }`;
 
-darkToggle.onclick=()=>{dark=!dark;document.body.classList.toggle('dark-mode',dark)}
-window.addEventListener('beforeunload',saveWriting)
+    const userPrompt = `Student: ${name}\nYear: ${year}\nTopic: ${topic}\nText: ${text}`;
+
+    for (let i = 0; i < retries; i++) {
+        try {
+            const response = await fetch(url, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ contents: [{ parts: [{ text: userPrompt }] }], systemInstruction: { parts: [{ text: systemInstruction }] }, generationConfig: { responseMimeType: "application/json" } })
+            });
+
+            const responseText = await response.text();
+
+            if (!response.ok) {
+                if (response.status === 429) {
+                    // Specific Rate Limit handling message for user feedback via console
+                    console.log(`Rate limit reached. Retrying attempt ${i+1}...`);
+                } else if (response.status === 401 || response.status === 403) {
+                    throw new Error(`API Key Error: Invalid or missing key.`);
+                } else if (response.status === 404) {
+                    throw new Error(`Model not found. Please ensure the API model name is correct.`);
+                }
+                throw new Error(`HTTP ${response.status}`);
+            }
+
+            const data = JSON.parse(responseText);
+            let resultText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+            if (!resultText) throw new Error("Empty AI response");
+            resultText = resultText.replace(/```json/gi, '').replace(/```/g, '').trim();
+            return JSON.parse(resultText);
+        } catch (error) {
+            if (i === retries - 1) {
+                if (error.message.includes("429")) {
+                    throw new Error("Server is very busy (Rate Limit). Please wait 60 seconds and try again.");
+                }
+                throw error;
+            }
+            await new Promise(r => setTimeout(r, delays[i]));
+        }
+    }
+}
+
+function displayReportCard(name, year, reportData) {
+    lastReportData = reportData;
+    document.getElementById('reportName').textContent = name || "Candidate";
+    document.getElementById('reportYear').textContent = year ? `Year ${year}` : "Level Unknown";
+    document.getElementById('reportTotalScore').textContent = reportData.totalScore || 0;
+    const impEl = document.getElementById('reportImprovement');
+    impEl.innerHTML = reportData.improvementComment ? `<strong>How to Improve:</strong> ${escapeHtml(reportData.improvementComment)}` : "";
+    const list = document.getElementById('reportCriteriaList'); list.innerHTML = '';
+    reportData.criteria.forEach(item => {
+        const row = document.createElement('div'); row.className = 'criterion-row';
+        row.innerHTML = `<div class="criterion-score">${item.score}<small>/ ${item.maxScore}</small></div>
+            <div class="criterion-content"><h4>${item.name}</h4><p>${item.feedback}</p></div>`;
+        list.appendChild(row);
+    });
+}
+
+getReportBtn.onclick = async () => {
+    const text = analysisText.innerText.trim();
+    if (!text || text.length < 5) {
+        apiErrorMsg.textContent = "Please write a story before requesting a report.";
+        apiErrorMsg.style.display = "block";
+        return;
+    }
+
+    const name = studentNameInput.value.trim();
+    const year = yearLevelSelect.value;
+    const topic = PROMPTS[currentPromptIdx].title;
+
+    apiErrorMsg.style.display = "none"; 
+    getReportBtn.disabled = true;
+    document.getElementById('btnText').textContent = "Generating..."; 
+    document.getElementById('btnSpinner').style.display = "block";
+
+    try {
+        const reportData = await fetchGeminiReportWithRetry(text, name, year, topic);
+        displayReportCard(name, year, reportData);
+        finishOverlay.classList.remove('open'); 
+        reportOverlay.classList.add('open');
+    } catch (err) {
+        apiErrorMsg.textContent = err.message; 
+        apiErrorMsg.style.display = "block";
+    } finally {
+        getReportBtn.disabled = false; 
+        document.getElementById('btnText').textContent = "Get My Report"; 
+        document.getElementById('btnSpinner').style.display = "none";
+    }
+};
+
+closeReportBtn.onclick = () => { reportOverlay.classList.remove('open'); finishOverlay.classList.add('open'); };
+
+function generateReportText(name, year) {
+    if (!lastReportData) return "";
+    let text = `WRITING REPORT\nStudent: ${name || 'Candidate'} | Year: ${year || 'Unknown'}\nTotal: ${lastReportData.totalScore}/47\n\nIMPROVEMENT:\n${lastReportData.improvementComment}\n\nCRITERIA:\n`;
+    lastReportData.criteria.forEach(c => { text += `* ${c.name}: ${c.score}/${c.maxScore}\n  ${c.feedback}\n\n`; });
+    return text;
+}
+
+downloadReportBtn.onclick = () => {
+    const text = generateReportText(studentNameInput.value, yearLevelSelect.value);
+    const blob = new Blob([text], { type: 'text/plain' });
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'Report.txt'; a.click();
+};
+
+emailReportBtn.onclick = () => {
+    const text = generateReportText(studentNameInput.value, yearLevelSelect.value);
+    window.location.href = `mailto:?subject=Writing Report&body=${encodeURIComponent(text)}`;
+};
+
+// Initial Load
+loadPrompt(0); loadWriting(); updateWordCount(); updateTimerDisplay();
+writingArea.addEventListener('input',()=>{updateWordCount();saveWriting()});
+window.addEventListener('beforeunload',saveWriting);
 </script>
 </body>
 </html>
