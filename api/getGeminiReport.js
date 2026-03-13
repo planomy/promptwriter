@@ -1,4 +1,4 @@
-exports.handler = async (event) => {
+export default async function handler(req, res) {
   // --- CRITICAL LOGGING ---
   // This will show up in your Netlify Function Logs the instant ANY request hits this file.
   const origin = event.headers.origin || event.headers.Origin || "No Origin";
