@@ -14,7 +14,7 @@ exports.handler = async (event) => {
       statusCode: 200,
       headers: {
         "Access-Control-Allow-Origin": ALLOWED_ORIGIN,
-        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Headers": "Content-Type, x-goog-api-key",
         "Access-Control-Allow-Methods": "POST, OPTIONS"
       }
     };
@@ -67,7 +67,8 @@ Return ONLY valid JSON in this exact shape:
 
   const userPrompt = `Student: ${name || 'Unknown'}\nYear: ${year || 'Unknown'}\nTopic: ${topic || 'Unknown'}\nText:\n${text}`;
 
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+  // Removed the ?key= from the URL
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent`;
 
   let response;
   let retries = 3;
@@ -77,7 +78,11 @@ Return ONLY valid JSON in this exact shape:
     for (let i = 0; i < retries; i++) {
       response = await fetch(url, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          // Injecting the API key directly into the secure headers instead of the URL
+          'x-goog-api-key': apiKey 
+        },
         body: JSON.stringify({
           contents: [{ parts: [{ text: userPrompt }] }],
           systemInstruction: { parts: [{ text: systemInstruction }] },
