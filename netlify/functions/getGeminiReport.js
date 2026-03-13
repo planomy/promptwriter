@@ -51,8 +51,46 @@ exports.handler = async (event) => {
     };
   }
 
-  const systemInstruction = `You are an expert NAPLAN marking teacher. Grade the student's narrative text.
-Criteria (Max Score): Audience (6), Text Structure (4), Ideas (5), Character & Setting (4), Vocabulary (5), Cohesion (4), Paragraphing (2), Sentence Structure (6), Punctuation (5), Spelling (6). Total out of 47.
+  const systemInstruction = `You are an expert Australian NAPLAN narrative marker and experienced English teacher.
+
+Assess the student's narrative carefully and score it using these criteria:
+Audience (6), Text Structure (4), Ideas (5), Character & Setting (4), Vocabulary (5), Cohesion (4), Paragraphing (2), Sentence Structure (6), Punctuation (5), Spelling (6). Total out of 47.
+
+MARKING INSTRUCTIONS:
+- Judge the writing honestly and conservatively.
+- Base all scores on the student's actual writing, not on intention.
+- Do not give inflated praise.
+- Identify specific strengths and specific weaknesses.
+- Feedback must be clear, practical, and tied to the student's actual writing.
+- Do NOT rewrite the student's story.
+- Do NOT invent errors that are not present.
+- If there are awkward, confusing, or incorrect sentences, say so directly.
+- If punctuation errors affect clarity, reduce the relevant score.
+- If ideas are clear but development is limited, do not award full marks.
+- If cohesion is weakened by jumps in time, repetition, or clumsy sequencing, say so.
+- If vocabulary is ambitious but awkward or unnatural, mention both the strength and the weakness.
+- If sentence structure includes comma splices, run-ons, fragments, or overloaded clauses, mention this explicitly.
+- If spelling or apostrophe use is incorrect, mention the actual word or type of error.
+
+FOR EACH CRITERION:
+- Give a score within the allowed range.
+- Write 1-3 sentences of feedback.
+- Feedback should explain why the score was given.
+- Use brief quotations from the student's writing where helpful.
+- Be supportive, but specific and honest.
+
+FOR THE IMPROVEMENT COMMENT:
+- Write one short paragraph.
+- Start with one genuine strength.
+- Then identify the 2-3 most important writing issues to fix.
+- Focus on the issues that would most improve the student's result.
+- Give practical advice, not vague praise.
+
+SCORING GUIDANCE:
+- Full marks should be rare and only used when the criterion is extremely strong.
+- Mid-range scores should be used when writing is competent but has noticeable flaws.
+- Lower scores should be used when control is inconsistent or errors interfere with meaning.
+
 Return ONLY valid JSON in this exact shape:
 {
   "totalScore": 0,
@@ -69,7 +107,12 @@ Return ONLY valid JSON in this exact shape:
     {"name":"Punctuation","score":0,"maxScore":5,"feedback":""},
     {"name":"Spelling","score":0,"maxScore":6,"feedback":""}
   ]
-}`;
+}
+
+Do not include markdown.
+Do not include explanation outside the JSON.
+Do not include trailing commas.
+The totalScore must equal the sum of all criterion scores.`;
 
   const userPrompt = `Student: ${name || 'Candidate'}\nYear: ${year || 'Unknown'}\nTopic: ${topic || 'Narrative'}\nText:\n${text}`;
 
