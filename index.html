@@ -492,10 +492,10 @@ toggleStopBtn.onclick=()=>{
   }
 };
 
-// ---- Netlify Backend Integration ----
+// ---- Vercel Backend Integration ----
 async function fetchGeminiReportWithRetry(text, name, year, topic, retries = 5) {
     const delays = [2000, 4000, 8000, 16000, 25000];
-    const url = "/.netlify/functions/getGeminiReport";
+    const url = "/api/functions/getGeminiReport";
 
     for (let i = 0; i < retries; i++) {
         try {
