@@ -154,25 +154,6 @@ audio-close{position:absolute;right:10px;top:-29px;width:28px;height:28px;color:
 .btn-secondary { height: 44px; padding: 0 16px; background: #fff; border: 1px solid #cbd5e1; border-radius: 6px; color: #475569; font-weight: 700; cursor: pointer; transition: all 0.2s; }
 .btn-secondary:hover { background: #f1f5f9; color: #1e293b; }
 
-/* Dark Mode */
-.dark-mode .content, .dark-mode .editor, .dark-mode .footer, .dark-mode .app, .dark-mode .setup-overlay, .dark-mode .header, .dark-mode .editor-scroll, .dark-mode .toolbar { background:#2f3c4f; border-color:#445a77; }
-.dark-mode .header { border-bottom: 1px solid #445a77; }
-.dark-mode .task-title { color: #f0f3fb !important; }
-.dark-mode .instruction { color: #b4b9c5 !important; }
-.dark-mode .toolbar { color: #b4b9c5 !important; border-bottom: 1px solid #445a77; }
-.dark-mode .toolbar span:hover { background: #445a77; color: #fff; }
-.dark-mode .toolbar .sep { background: #445a77; }
-.dark-mode .text-area, .dark-mode .analysis-text { color: #ffffff !important; }
-
-.dark-mode .setup-card, .dark-mode .finish-sidebar, .dark-mode .finish-main { background:#34465d; border-color:#445a77; }
-.dark-mode .entry-input, .dark-mode .entry-select, .dark-mode .analysis-row { background:transparent; color:#ffffff; border-color:#445a77; }
-.dark-mode .report-card { background:#2d3748; border-color:#445a77; }
-.dark-mode .report-header { background:#1e293b; border-color:#445a77; }
-.dark-mode .report-body { background:#2d3748; }
-.dark-mode .criterion-row { background:#34465d; border-color:#445a77; }
-.dark-mode .criterion-score { background:#1e293b; color:#93c5fd; }
-.dark-mode .report-improvement { background: rgba(59, 130, 246, 0.1); border-color: #60a5fa; color: #e2e8f0; }
-
 /* Loading Spinner */
 .spinner { border: 3px solid rgba(255,255,255,0.3); border-radius: 50%; border-top: 3px solid #fff; width: 18px; height: 18px; animation: spin 1s linear infinite; margin-right: 8px; display: none; }
 @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -204,7 +185,7 @@ audio-close{position:absolute;right:10px;top:-29px;width:28px;height:28px;color:
       <div class="header-right"></div>
       <div class="timer" id="timer">42:00<small>Hours&nbsp;&nbsp;&nbsp;Mins</small></div>
       <div class="pill one" id="hideTimeBtn">Hide<br>time</div>
-      <div class="pill two" id="darkToggle">Dark<br>mode</div>
+    
       <div class="task-title" id="mainHeaderTitle">Narrative Writing Sim</div>
     </div>
 
@@ -336,7 +317,7 @@ const PROMPTS = [
 
 let currentPromptIdx = 0;
 let lastReportData = null;
-const timerEl=document.getElementById('timer'), hideTimeBtn=document.getElementById('hideTimeBtn'), darkToggle=document.getElementById('darkToggle');
+const timerEl=document.getElementById('timer'), hideTimeBtn=document.getElementById('hideTimeBtn');
 const promptBtn=document.getElementById('promptBtn'), promptOverlay=document.getElementById('promptOverlay'), startWriting=document.getElementById('startWriting');
 const nextPromptBtn=document.getElementById('nextPromptBtn'), closePromptBtn=document.getElementById('closePromptBtn');
 const writingArea=document.getElementById('writingArea'), wordCount=document.getElementById('wordCount');
@@ -350,7 +331,7 @@ const reportOverlay=document.getElementById('reportOverlay'), closeReportBtn=doc
 const emailReportBtn=document.getElementById('emailReportBtn'), downloadReportBtn=document.getElementById('downloadReportBtn');
 const apiErrorMsg=document.getElementById('apiErrorMsg');
 
-let seconds=42*60, timerVisible=true, dark=false, stopMode = false, timerInterval = null;
+let seconds=42*60, timerVisible=true, stopMode = false, timerInterval = null;
 const STORAGE_KEY='prompt-writer-autosave';
 
 const STARTER_WORDS=new Set(['the','it','a','an','he','she','his','her','this','i','my','we','suddenly']);
@@ -373,7 +354,7 @@ function startTimer(){
 function stopTimer(){ if(timerInterval){clearInterval(timerInterval);timerInterval=null;} }
 
 hideTimeBtn.onclick=()=>{timerVisible=!timerVisible;timerEl.classList.toggle('hidden',!timerVisible);hideTimeBtn.innerHTML=timerVisible?'Hide<br>time':'Show<br>time'};
-darkToggle.onclick=()=>{dark=!dark;document.body.classList.toggle('dark-mode',dark)};
+
 
 document.querySelectorAll('#editorToolbar span').forEach(btn => {
   btn.onclick = () => {
