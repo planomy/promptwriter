@@ -1,5 +1,8 @@
 {
   "name": "prompt-writer-pro",
   "version": "1.0.0",
+  "scripts": {
+    "build": "echo 'Building...'"
+  },
   "dependencies": {}
 }
