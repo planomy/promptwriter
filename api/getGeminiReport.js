@@ -32,7 +32,7 @@ export default async function handler(req, res) {
   // --- PARSE REQUEST ---
   let body;
   try {
-    body = JSON.parse(event.body || "{}");
+    body = req.body || {};
   } catch (error) {
     return { statusCode: 400, body: JSON.stringify({ error: "Invalid JSON" }) };
   }
