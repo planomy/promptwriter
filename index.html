@@ -104,7 +104,7 @@ audio-close{position:absolute;right:10px;top:-29px;width:28px;height:28px;color:
 .analysis-swatch{width:12px;height:12px;display:inline-block;margin-right:8px;border-radius:2px;vertical-align:middle;}
 .analysis-text{font-size:17px;line-height:1.7;color:#3f4653;white-space:pre-wrap;outline:none;min-height:100%; word-wrap: break-word;}.analysis-text .hl{padding:1px 2px;border-radius:3px}
 
-.analysis-text .hl-starter{background:#9bc9ff !important} 
+.analysis-text .hl-starter{background:#9bc9ff !important}
 .analysis-text .hl-auxiliary{background:#ffb7b7 !important}
 .analysis-text .hl-filter{background:#d6b8ff !important}
 .analysis-text .hl-adverb{background:#fff2a6 !important}
@@ -113,8 +113,11 @@ audio-close{position:absolute;right:10px;top:-29px;width:28px;height:28px;color:
 .analysis-text .hl-adjective{background:#ff96cc !important}
 .analysis-text .hl-stop{background:#d7d7d7}
 
-.analysis-text.hide-stop .hl-stop { background: transparent !important; padding: 0 !important; }.analysis-text.hide-stop .hl-stop { background: transparent; }
-.analysis-text.stop-only .hl:not(.hl-stop) { background: transparent !important; padding: 0 !important; }
+/* Only hide the gray background if the word hasn't been flagged as a specific category */
+.analysis-text.hide-stop .hl-stop:not(.hl-starter):not(.hl-auxiliary):not(.hl-filter):not(.hl-adverb):not(.hl-basic):not(.hl-repeat):not(.hl-adjective) { 
+  background: transparent !important; 
+  padding: 0 !important; 
+}
 
 .analysis-text.hide-starter .hl-starter,
 .analysis-text.hide-auxiliary .hl-auxiliary,
