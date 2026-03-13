@@ -219,7 +219,6 @@ audio-close{position:absolute;right:10px;top:-29px;width:28px;height:28px;color:
       <button class="btn right" id="finishBtn">Finish&nbsp;&nbsp;›</button>
     </div>
 
-    <!-- Overlays -->
     <div class="prompt-overlay" id="promptOverlay">
       <div class="audio-strip">
         <div class="audio-close" id="closePromptBtn">✕</div>
@@ -278,7 +277,6 @@ audio-close{position:absolute;right:10px;top:-29px;width:28px;height:28px;color:
       </div>
     </div>
 
-    <!-- Report Overlay -->
     <div class="report-overlay" id="reportOverlay">
       <div class="report-card">
         <div class="report-header">
@@ -307,10 +305,6 @@ audio-close{position:absolute;right:10px;top:-29px;width:28px;height:28px;color:
   </div>
 
 <script>
-// ROTATE THIS KEY BEFORE USE
-const apiKey = "";
-const MODEL_NAME = "gemini-2.5-flash";
-
 const PROMPTS = [
   {title: "The Net", line1: "Write a narrative (story) that includes the idea of a net.", line2: "Something stuck, a rescue, or a complex web of events.", line3: "You can use an idea on this prompt or your own idea about a net.", thinkAbout: ["the characters and where they are", "the complication or problem to be solved", "how the story will end"], img: "thenet.jpeg"},
   {title: "The Secret Door", line1: "Write a story about discovering a secret door where it shouldn't be.", line2: "Perhaps it is hidden behind a bookshelf, buried in a garden, or appears only at midnight. Where does it lead?", line3: "Focus on the suspense and the wonder of discovery.", thinkAbout: ["the mysterious appearance of the door", "the feeling of turning the handle", "what lies on the other side"], img: "thesecretdoor.jpeg"},
@@ -456,7 +450,6 @@ function loadWriting(){
   try{ const saved=localStorage.getItem(STORAGE_KEY); if(saved){writingArea.innerHTML=saved} }catch(e){}
 }
 
-// Navigation Listeners
 beginTestBtn.onclick=()=>{
     const name = studentNameInput.value.trim(), year = yearLevelSelect.value;
     if (name || year) mainHeaderTitle.textContent = (name && year) ? `${name} | Year ${year}` : (name || `Year ${year}`);
@@ -499,48 +492,19 @@ toggleStopBtn.onclick=()=>{
   }
 };
 
-// ---- Gemini API Integration ----
+// ---- Netlify Backend Integration ----
 async function fetchGeminiReportWithRetry(text, name, year, topic, retries = 5) {
     const delays = [2000, 4000, 8000, 16000, 25000];
-const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent";
-    const systemInstruction = `You are an expert NAPLAN marking teacher. Grade the student's narrative text using the Narrative marking guide.
-Criteria (Max Score): Audience (6), Text Structure (4), Ideas (5), Character & Setting (4), Vocabulary (5), Cohesion (4), Paragraphing (2), Sentence Structure (6), Punctuation (5), Spelling (6). Total out of 47.
-Provide ONLY valid JSON in this exact shape:
-{
-  "totalScore": 0,
-  "improvementComment": "",
-  "criteria": [
-    {"name":"Audience","score":0,"maxScore":6,"feedback":""},
-    {"name":"Text Structure","score":0,"maxScore":4,"feedback":""},
-    {"name":"Ideas","score":0,"maxScore":5,"feedback":""},
-    {"name":"Character & Setting","score":0,"maxScore":4,"feedback":""},
-    {"name":"Vocabulary","score":0,"maxScore":5,"feedback":""},
-    {"name":"Cohesion","score":0,"maxScore":4,"feedback":""},
-    {"name":"Paragraphing","score":0,"maxScore":2,"feedback":""},
-    {"name":"Sentence Structure","score":0,"maxScore":6,"feedback":""},
-    {"name":"Punctuation","score":0,"maxScore":5,"feedback":""},
-    {"name":"Spelling","score":0,"maxScore":6,"feedback":""}
-  ]
-}`;
-
-    const userPrompt = `Student: ${name || 'Unknown'}\nYear: ${year || 'Unknown'}\nTopic: ${topic || 'Unknown'}\nText: ${text || ''}`;
+    const url = "/.netlify/functions/getGeminiReport";
 
     for (let i = 0; i < retries; i++) {
         try {
             const response = await fetch(url, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'x-goog-api-key': apiKey
+                    'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({
-                    contents: [{ parts: [{ text: userPrompt }] }],
-                    systemInstruction: { parts: [{ text: systemInstruction }] },
-                    generationConfig: {
-                        responseMimeType: 'application/json',
-                        temperature: 0.4
-                    }
-                })
+                body: JSON.stringify({ text, name, year, topic })
             });
 
             const responseText = await response.text();
@@ -549,30 +513,27 @@ Provide ONLY valid JSON in this exact shape:
                 let message = `HTTP ${response.status}`;
                 try {
                     const errJson = JSON.parse(responseText);
-                    const apiMsg = errJson?.error?.message;
-                    if (apiMsg) message += ` - ${apiMsg}`;
+                    if (errJson?.error) {
+                        message = errJson.error;
+                    } else if (errJson?.message) {
+                        message = errJson.message;
+                    }
                 } catch (_) {}
 
-                if (response.status === 429) {
+                if (response.status === 429 && i < retries - 1) {
                     throw new Error('429 - Server busy');
                 }
-                if (response.status === 401 || response.status === 403) {
-                    throw new Error(message + ' - API key invalid or restricted.');
-                }
-                if (response.status === 404) {
-                    throw new Error(message + ' - model not found.');
-                }
+
                 throw new Error(message);
             }
 
-            const data = JSON.parse(responseText);
-            let resultText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-            if (!resultText) throw new Error('Empty AI response');
-            resultText = resultText.replace(/```json/gi, '').replace(/```/g, '').trim();
-            return JSON.parse(resultText);
+            return JSON.parse(responseText);
+
         } catch (error) {
             if (i === retries - 1) {
-                if (String(error.message).includes('429')) throw new Error('Server busy. Please wait and try again.');
+                if (String(error.message).includes('429')) {
+                    throw new Error('Server busy. Please wait and try again.');
+                }
                 throw error;
             }
             await new Promise(r => setTimeout(r, delays[i]));
@@ -603,22 +564,27 @@ getReportBtn.onclick = async () => {
         apiErrorMsg.style.display = 'block';
         return;
     }
-    const name = studentNameInput.value.trim(), year = yearLevelSelect.value, topic = PROMPTS[currentPromptIdx].title;
-    apiErrorMsg.style.display = 'none'; 
+
+    const name = studentNameInput.value.trim();
+    const year = yearLevelSelect.value;
+    const topic = PROMPTS[currentPromptIdx].title;
+
+    apiErrorMsg.style.display = 'none';
     getReportBtn.disabled = true;
-    document.getElementById('btnText').textContent = 'Generating...'; 
+    document.getElementById('btnText').textContent = 'Generating...';
     document.getElementById('btnSpinner').style.display = 'block';
+
     try {
         const reportData = await fetchGeminiReportWithRetry(text, name, year, topic);
         displayReportCard(name, year, reportData);
-        finishOverlay.classList.remove('open'); 
+        finishOverlay.classList.remove('open');
         reportOverlay.classList.add('open');
     } catch (err) {
-        apiErrorMsg.textContent = err.message; 
+        apiErrorMsg.textContent = err.message;
         apiErrorMsg.style.display = 'block';
     } finally {
-        getReportBtn.disabled = false; 
-        document.getElementById('btnText').textContent = 'Get My Report'; 
+        getReportBtn.disabled = false;
+        document.getElementById('btnText').textContent = 'Get My Report';
         document.getElementById('btnSpinner').style.display = 'none';
     }
 };
@@ -643,8 +609,10 @@ emailReportBtn.onclick = () => {
     window.location.href = `mailto:?subject=Writing Assessment Report&body=${encodeURIComponent(text)}`;
 };
 
-// Start
-loadPrompt(0); loadWriting(); updateWordCount(); updateTimerDisplay();
+loadPrompt(0);
+loadWriting();
+updateWordCount();
+updateTimerDisplay();
 writingArea.addEventListener('input',()=>{updateWordCount();saveWriting()});
 window.addEventListener('beforeunload',saveWriting);
 </script>
