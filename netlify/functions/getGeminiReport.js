@@ -22,6 +22,9 @@ exports.handler = async (event) => {
     return { statusCode: 405, body: "Method Not Allowed" };
   }
 
+  // DEBUG LOG: Check if Netlify actually sees your key (view in Netlify Function Logs)
+  console.log("Has Gemini key:", !!process.env.GEMINI_API_KEY);
+
   let body;
   try {
     body = JSON.parse(event.body || "{}");
@@ -64,17 +67,15 @@ Return ONLY valid JSON in this exact shape:
 
   const userPrompt = `Student: ${name || 'Unknown'}\nYear: ${year || 'Unknown'}\nTopic: ${topic || 'Unknown'}\nText:\n${text}`;
 
-  // UPDATED: Using gemini-2.0-flash for maximum request limits and performance
-  // v1beta is required for the 2.0 series
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+  // STABLE v1 ENDPOINT + GEMINI-2.5-FLASH
+  const url = `https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent`;
 
   try {
     const response = await fetch(url, {
       method: 'POST',
       headers: { 
         'Content-Type': 'application/json',
-        // DUAL INJECTION: Sending key in both header AND URL to force identity recognition
-        'x-goog-api-key': apiKey 
+        'x-goog-api-key': apiKey // Header Auth Pattern
       },
       body: JSON.stringify({
         contents: [{ parts: [{ text: userPrompt }] }],
