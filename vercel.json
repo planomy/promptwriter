@@ -1,7 +1,18 @@
 {
   "version": 2,
   "rewrites": [
-    { "source": "/api/getGeminiReport", "destination": "/api/getGeminiReport.js" },
-    { "source": "/(.*)", "destination": "/index.html" }
-  ]
+    { 
+      "source": "/api/getGeminiReport", 
+      "destination": "/api/getGeminiReport.js" 
+    },
+    { 
+      "source": "/(.*)", 
+      "destination": "/index.html" 
+    }
+  ],
+  "functions": {
+    "api/*.js": {
+      "runtime": "nodejs20.x"
+    }
+  }
 }
