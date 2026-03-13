@@ -1,6 +1,5 @@
 exports.handler = async (event) => {
   // --- SECURITY LOCK ---
-  // Replace this with your exact Netlify website URL if it changes
   const ALLOWED_ORIGIN = "https://promptwriter.netlify.app"; 
   const origin = event.headers.origin || event.headers.Origin;
   
@@ -8,13 +7,12 @@ exports.handler = async (event) => {
     return { statusCode: 403, body: JSON.stringify({ error: "Access Denied: Invalid Origin" }) };
   }
 
-  // Handle preflight CORS request
   if (event.httpMethod === "OPTIONS") {
     return {
       statusCode: 200,
       headers: {
         "Access-Control-Allow-Origin": ALLOWED_ORIGIN,
-        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Headers": "Content-Type, x-goog-api-key",
         "Access-Control-Allow-Methods": "POST, OPTIONS"
       }
     };
@@ -33,15 +31,14 @@ exports.handler = async (event) => {
 
   const { text, name, year, topic } = body;
   
-  // FIX: Extremely aggressive cleanup of the API Key
-  const apiKey = (process.env.GEMINI_API_KEY || "").replace(/['"\s]/g, '');
+  // Clean the key from any accidental junk
+  const apiKey = (process.env.GEMINI_API_KEY || "").replace(/['"\s]/g, '').trim();
 
-  // TRIPWIRE: Stop immediately if the key is blank instead of hitting Google
   if (!apiKey || apiKey.length < 20) {
     return { 
       statusCode: 400, 
       headers: { "Access-Control-Allow-Origin": ALLOWED_ORIGIN, "Content-Type": "application/json" },
-      body: JSON.stringify({ error: `NETLIFY CONFIG ERROR: The server cannot see your API Key. It is completely blank. Please check your Netlify Environment Variables and click 'Trigger Deploy'.` }) 
+      body: JSON.stringify({ error: "SERVER ERROR: API Key is missing or invalid in Netlify settings." }) 
     };
   }
 
@@ -67,44 +64,29 @@ Return ONLY valid JSON in this exact shape:
 
   const userPrompt = `Student: ${name || 'Unknown'}\nYear: ${year || 'Unknown'}\nTopic: ${topic || 'Unknown'}\nText:\n${text}`;
 
-  // RESTORED: The key MUST be in the URL parameter. The header method was failing.
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
-
-  let response;
-  let retries = 3;
-  let delay = 2000; 
+  // UPDATED: Using gemini-2.0-flash for maximum request limits and performance
+  // v1beta is required for the 2.0 series
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
   try {
-    for (let i = 0; i < retries; i++) {
-      response = await fetch(url, {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: userPrompt }] }],
-          systemInstruction: { parts: [{ text: systemInstruction }] },
-          generationConfig: { responseMimeType: "application/json", temperature: 0.2 }
-        })
-      });
-
-      if (response.status === 429) {
-        if (i === retries - 1) {
-          throw new Error("Too many students are submitting at once. Please wait a moment and click get marking again.");
-        }
-        await new Promise(res => setTimeout(res, delay));
-        delay *= 2; 
-      } else {
-        break; 
-      }
-    }
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 
+        'Content-Type': 'application/json',
+        // DUAL INJECTION: Sending key in both header AND URL to force identity recognition
+        'x-goog-api-key': apiKey 
+      },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: userPrompt }] }],
+        systemInstruction: { parts: [{ text: systemInstruction }] },
+        generationConfig: { responseMimeType: "application/json", temperature: 0.2 }
+      })
+    });
 
     const data = await response.json();
     
-    // Improved Error Logging for Google API Failures
     if (!response.ok) {
-        const maskedKey = `${apiKey.substring(0, 5)}...`;
-        throw new Error(`Google API Error (Using key ${maskedKey}): ${data.error?.message || response.statusText}`);
+        throw new Error(`Google API Error: ${data.error?.message || response.statusText}`);
     }
 
     const resultText = data.candidates?.[0]?.content?.parts?.[0]?.text;
