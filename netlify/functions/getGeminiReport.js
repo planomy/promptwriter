@@ -52,7 +52,7 @@ exports.handler = async (event) => {
   }
 
   const systemInstruction = `You are an expert Australian NAPLAN narrative marker and experienced English teacher.
-
+The student is in Year ${year}. Adjust expectations appropriately for this year level.
 Assess the student's narrative carefully and score it using these criteria:
 Audience (6), Text Structure (4), Ideas (5), Character & Setting (4), Vocabulary (5), Cohesion (4), Paragraphing (2), Sentence Structure (6), Punctuation (5), Spelling (6). Total out of 47.
 
