@@ -1,17 +1,19 @@
 exports.handler = async (event) => {
   // --- SECURITY LOCK ---
-  const ALLOWED_ORIGIN = "https://promptwriter.netlify.app"; 
-  const origin = event.headers.origin || event.headers.Origin;
+  // This allows any .netlify.app site you own to call the function
+  const origin = event.headers.origin || event.headers.Origin || "";
+  const isAllowed = origin.endsWith(".netlify.app") || origin.includes("localhost");
   
-  if (origin && origin !== ALLOWED_ORIGIN) {
-    return { statusCode: 403, body: JSON.stringify({ error: "Access Denied: Invalid Origin" }) };
+  if (!isAllowed) {
+    return { statusCode: 403, body: JSON.stringify({ error: "Access Denied: Unauthorized Origin" }) };
   }
 
+  // Handle preflight CORS request
   if (event.httpMethod === "OPTIONS") {
     return {
       statusCode: 200,
       headers: {
-        "Access-Control-Allow-Origin": ALLOWED_ORIGIN,
+        "Access-Control-Allow-Origin": origin,
         "Access-Control-Allow-Headers": "Content-Type, x-goog-api-key",
         "Access-Control-Allow-Methods": "POST, OPTIONS"
       }
@@ -22,7 +24,8 @@ exports.handler = async (event) => {
     return { statusCode: 405, body: "Method Not Allowed" };
   }
 
-  // DEBUG LOG: Check if Netlify actually sees your key (view in Netlify Function Logs)
+  // DEBUG LOG: You will see this in your Netlify Function Logs if the request reaches here
+  console.log("Request received from:", origin);
   console.log("Has Gemini key:", !!process.env.GEMINI_API_KEY);
 
   let body;
@@ -33,15 +36,13 @@ exports.handler = async (event) => {
   }
 
   const { text, name, year, topic } = body;
-  
-  // Clean the key from any accidental junk
   const apiKey = (process.env.GEMINI_API_KEY || "").replace(/['"\s]/g, '').trim();
 
   if (!apiKey || apiKey.length < 20) {
     return { 
       statusCode: 400, 
-      headers: { "Access-Control-Allow-Origin": ALLOWED_ORIGIN, "Content-Type": "application/json" },
-      body: JSON.stringify({ error: "SERVER ERROR: API Key is missing or invalid in Netlify settings." }) 
+      headers: { "Access-Control-Allow-Origin": origin, "Content-Type": "application/json" },
+      body: JSON.stringify({ error: "SERVER CONFIG ERROR: API Key missing in Netlify." }) 
     };
   }
 
@@ -65,17 +66,17 @@ Return ONLY valid JSON in this exact shape:
   ]
 }`;
 
-  const userPrompt = `Student: ${name || 'Unknown'}\nYear: ${year || 'Unknown'}\nTopic: ${topic || 'Unknown'}\nText:\n${text}`;
+  const userPrompt = `Student: ${name}\nYear: ${year}\nTopic: ${topic}\nText:\n${text}`;
 
-  // STABLE v1 ENDPOINT + GEMINI-2.5-FLASH
-  const url = `https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent`;
+  // STABLE v1 ENDPOINT + HIGH-LIMIT MODEL
+  const url = `https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent`;
 
   try {
     const response = await fetch(url, {
       method: 'POST',
       headers: { 
         'Content-Type': 'application/json',
-        'x-goog-api-key': apiKey // Header Auth Pattern
+        'x-goog-api-key': apiKey 
       },
       body: JSON.stringify({
         contents: [{ parts: [{ text: userPrompt }] }],
@@ -91,13 +92,12 @@ Return ONLY valid JSON in this exact shape:
     }
 
     const resultText = data.candidates?.[0]?.content?.parts?.[0]?.text;
-    if (!resultText) throw new Error("No response from AI");
-
+    
     return {
       statusCode: 200,
       headers: { 
         "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": ALLOWED_ORIGIN 
+        "Access-Control-Allow-Origin": origin 
       },
       body: resultText
     };
@@ -107,7 +107,7 @@ Return ONLY valid JSON in this exact shape:
       statusCode: 500,
       headers: { 
         "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": ALLOWED_ORIGIN 
+        "Access-Control-Allow-Origin": origin 
       },
       body: JSON.stringify({ error: error.message })
     };
