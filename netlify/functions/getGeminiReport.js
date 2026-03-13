@@ -14,7 +14,7 @@ exports.handler = async (event) => {
       statusCode: 200,
       headers: {
         "Access-Control-Allow-Origin": ALLOWED_ORIGIN,
-        "Access-Control-Allow-Headers": "Content-Type, x-goog-api-key",
+        "Access-Control-Allow-Headers": "Content-Type",
         "Access-Control-Allow-Methods": "POST, OPTIONS"
       }
     };
@@ -36,7 +36,7 @@ exports.handler = async (event) => {
   // FIX: Extremely aggressive cleanup of the API Key
   const apiKey = (process.env.GEMINI_API_KEY || "").replace(/['"\s]/g, '');
 
-  // TRIPWIRE: If the key is blank or too short, stop immediately and alert the user
+  // TRIPWIRE: Stop immediately if the key is blank instead of hitting Google
   if (!apiKey || apiKey.length < 20) {
     return { 
       statusCode: 400, 
@@ -67,8 +67,8 @@ Return ONLY valid JSON in this exact shape:
 
   const userPrompt = `Student: ${name || 'Unknown'}\nYear: ${year || 'Unknown'}\nTopic: ${topic || 'Unknown'}\nText:\n${text}`;
 
-  // Removed the ?key= from the URL
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent`;
+  // RESTORED: The key MUST be in the URL parameter. The header method was failing.
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
 
   let response;
   let retries = 3;
@@ -79,9 +79,7 @@ Return ONLY valid JSON in this exact shape:
       response = await fetch(url, {
         method: 'POST',
         headers: { 
-          'Content-Type': 'application/json',
-          // Injecting the API key directly into the secure headers instead of the URL
-          'x-goog-api-key': apiKey 
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           contents: [{ parts: [{ text: userPrompt }] }],
