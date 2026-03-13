@@ -1,12 +1,14 @@
 exports.handler = async (event) => {
   // --- SECURITY LOCK ---
+  // Replace this with your exact Netlify website URL if it changes
   const ALLOWED_ORIGIN = "https://promptwriter.netlify.app"; 
   const origin = event.headers.origin || event.headers.Origin;
   
   if (origin && origin !== ALLOWED_ORIGIN) {
-    return { statusCode: 403, body: JSON.stringify({ error: "Access Denied" }) };
+    return { statusCode: 403, body: JSON.stringify({ error: "Access Denied: Invalid Origin" }) };
   }
 
+  // Handle preflight CORS request
   if (event.httpMethod === "OPTIONS") {
     return {
       statusCode: 200,
@@ -31,11 +33,16 @@ exports.handler = async (event) => {
 
   const { text, name, year, topic } = body;
   
-  // FIX: Automatically remove any accidental spaces, newlines, OR quotes from the key
-  const apiKey = (process.env.GEMINI_API_KEY || "").replace(/['"]/g, '').trim();
+  // FIX: Extremely aggressive cleanup of the API Key
+  const apiKey = (process.env.GEMINI_API_KEY || "").replace(/['"\s]/g, '');
 
-  if (!apiKey) {
-    return { statusCode: 500, body: JSON.stringify({ error: "API Key missing in server environment." }) };
+  // TRIPWIRE: If the key is blank or too short, stop immediately and alert the user
+  if (!apiKey || apiKey.length < 20) {
+    return { 
+      statusCode: 400, 
+      headers: { "Access-Control-Allow-Origin": ALLOWED_ORIGIN, "Content-Type": "application/json" },
+      body: JSON.stringify({ error: `NETLIFY CONFIG ERROR: The server cannot see your API Key. It is completely blank. Please check your Netlify Environment Variables and click 'Trigger Deploy'.` }) 
+    };
   }
 
   const systemInstruction = `You are an expert NAPLAN marking teacher. Grade the student's narrative text.
@@ -91,10 +98,10 @@ Return ONLY valid JSON in this exact shape:
 
     const data = await response.json();
     
-    // Improved Error Logging
+    // Improved Error Logging for Google API Failures
     if (!response.ok) {
-        const maskedKey = apiKey ? `${apiKey.substring(0, 5)}...` : "EMPTY";
-        throw new Error(`Google API Error (Key starts with ${maskedKey}): ${data.error?.message || response.statusText}`);
+        const maskedKey = `${apiKey.substring(0, 5)}...`;
+        throw new Error(`Google API Error (Using key ${maskedKey}): ${data.error?.message || response.statusText}`);
     }
 
     const resultText = data.candidates?.[0]?.content?.parts?.[0]?.text;
@@ -112,7 +119,10 @@ Return ONLY valid JSON in this exact shape:
   } catch (error) {
     return {
       statusCode: 500,
-      headers: { "Access-Control-Allow-Origin": ALLOWED_ORIGIN },
+      headers: { 
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": ALLOWED_ORIGIN 
+      },
       body: JSON.stringify({ error: error.message })
     };
   }
