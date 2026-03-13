@@ -1,10 +1,15 @@
 exports.handler = async (event) => {
+  // --- CRITICAL LOGGING ---
+  // This will show up in your Netlify Function Logs the instant ANY request hits this file.
+  const origin = event.headers.origin || event.headers.Origin || "No Origin";
+  console.log(`[DEBUG] Function invoked. Method: ${event.httpMethod}, Origin: ${origin}`);
+  console.log(`[DEBUG] Env Variable Key Present: ${!!process.env.GEMINI_API_KEY}`);
+
   // --- SECURITY LOCK ---
-  // This allows any .netlify.app site you own to call the function
-  const origin = event.headers.origin || event.headers.Origin || "";
-  const isAllowed = origin.endsWith(".netlify.app") || origin.includes("localhost");
+  const isAllowed = origin.endsWith(".netlify.app") || origin.includes("localhost") || origin === "No Origin";
   
   if (!isAllowed) {
+    console.log(`[SECURITY] Blocked request from unauthorized origin: ${origin}`);
     return { statusCode: 403, body: JSON.stringify({ error: "Access Denied: Unauthorized Origin" }) };
   }
 
@@ -13,7 +18,7 @@ exports.handler = async (event) => {
     return {
       statusCode: 200,
       headers: {
-        "Access-Control-Allow-Origin": origin,
+        "Access-Control-Allow-Origin": origin === "No Origin" ? "*" : origin,
         "Access-Control-Allow-Headers": "Content-Type, x-goog-api-key",
         "Access-Control-Allow-Methods": "POST, OPTIONS"
       }
@@ -24,10 +29,7 @@ exports.handler = async (event) => {
     return { statusCode: 405, body: "Method Not Allowed" };
   }
 
-  // DEBUG LOG: You will see this in your Netlify Function Logs if the request reaches here
-  console.log("Request received from:", origin);
-  console.log("Has Gemini key:", !!process.env.GEMINI_API_KEY);
-
+  // --- PARSE REQUEST ---
   let body;
   try {
     body = JSON.parse(event.body || "{}");
@@ -36,13 +38,16 @@ exports.handler = async (event) => {
   }
 
   const { text, name, year, topic } = body;
+  
+  // Aggressive API Key Cleanup
   const apiKey = (process.env.GEMINI_API_KEY || "").replace(/['"\s]/g, '').trim();
 
   if (!apiKey || apiKey.length < 20) {
+    console.error("[ERROR] API Key is missing or invalid in Netlify settings.");
     return { 
       statusCode: 400, 
-      headers: { "Access-Control-Allow-Origin": origin, "Content-Type": "application/json" },
-      body: JSON.stringify({ error: "SERVER CONFIG ERROR: API Key missing in Netlify." }) 
+      headers: { "Access-Control-Allow-Origin": origin === "No Origin" ? "*" : origin, "Content-Type": "application/json" },
+      body: JSON.stringify({ error: "SERVER CONFIG ERROR: API Key missing in Netlify. Please check Environment Variables." }) 
     };
   }
 
@@ -66,17 +71,17 @@ Return ONLY valid JSON in this exact shape:
   ]
 }`;
 
-  const userPrompt = `Student: ${name}\nYear: ${year}\nTopic: ${topic}\nText:\n${text}`;
+  const userPrompt = `Student: ${name || 'Candidate'}\nYear: ${year || 'Unknown'}\nTopic: ${topic || 'Narrative'}\nText:\n${text}`;
 
-  // STABLE v1 ENDPOINT + HIGH-LIMIT MODEL
-  const url = `https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent`;
+  // Use v1beta for gemini-2.0-flash as it is the most robust endpoint for this model
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
   try {
+    console.log(`[API] Calling Gemini 2.0 Flash...`);
     const response = await fetch(url, {
       method: 'POST',
       headers: { 
-        'Content-Type': 'application/json',
-        'x-goog-api-key': apiKey 
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         contents: [{ parts: [{ text: userPrompt }] }],
@@ -88,26 +93,30 @@ Return ONLY valid JSON in this exact shape:
     const data = await response.json();
     
     if (!response.ok) {
+        console.error(`[GOOGLE ERROR] Status: ${response.status}, Message: ${data.error?.message}`);
         throw new Error(`Google API Error: ${data.error?.message || response.statusText}`);
     }
 
     const resultText = data.candidates?.[0]?.content?.parts?.[0]?.text;
-    
+    if (!resultText) throw new Error("No response from AI");
+
+    console.log("[SUCCESS] Report generated successfully.");
     return {
       statusCode: 200,
       headers: { 
         "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": origin 
+        "Access-Control-Allow-Origin": origin === "No Origin" ? "*" : origin
       },
       body: resultText
     };
 
   } catch (error) {
+    console.error("[RUNTIME ERROR]", error.message);
     return {
       statusCode: 500,
       headers: { 
         "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": origin 
+        "Access-Control-Allow-Origin": origin === "No Origin" ? "*" : origin
       },
       body: JSON.stringify({ error: error.message })
     };
