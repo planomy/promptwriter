@@ -1,54 +1,48 @@
 export default async function handler(req, res) {
-  // --- CRITICAL LOGGING ---
-  // This will show up in your Netlify Function Logs the instant ANY request hits this file.
-  const origin = event.headers.origin || event.headers.Origin || "No Origin";
-  console.log(`[DEBUG] Function invoked. Method: ${event.httpMethod}, Origin: ${origin}`);
+  const origin = req.headers.origin || req.headers.Origin || "No Origin";
+
+  console.log(`[DEBUG] Function invoked. Method: ${req.method}, Origin: ${origin}`);
   console.log(`[DEBUG] Env Variable Key Present: ${!!process.env.GEMINI_API_KEY}`);
 
-  // --- SECURITY LOCK ---
-  const isAllowed = origin.endsWith(".netlify.app") || origin.includes("localhost") || origin === "No Origin";
-  
+  const isAllowed =
+    origin === "No Origin" ||
+    origin.includes("localhost") ||
+    origin.endsWith(".vercel.app") ||
+    origin.endsWith(".netlify.app");
+
+  const allowOrigin = origin === "No Origin" ? "*" : origin;
+
+  res.setHeader("Access-Control-Allow-Origin", allowOrigin);
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, x-goog-api-key");
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+
   if (!isAllowed) {
     console.log(`[SECURITY] Blocked request from unauthorized origin: ${origin}`);
-    return { statusCode: 403, body: JSON.stringify({ error: "Access Denied: Unauthorized Origin" }) };
+    return res.status(403).json({ error: "Access Denied: Unauthorized Origin" });
   }
 
-  // Handle preflight CORS request
-  if (event.httpMethod === "OPTIONS") {
-    return {
-      statusCode: 200,
-      headers: {
-        "Access-Control-Allow-Origin": origin === "No Origin" ? "*" : origin,
-        "Access-Control-Allow-Headers": "Content-Type, x-goog-api-key",
-        "Access-Control-Allow-Methods": "POST, OPTIONS"
-      }
-    };
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
   }
 
-  if (event.httpMethod !== "POST") {
-    return { statusCode: 405, body: "Method Not Allowed" };
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method Not Allowed" });
   }
 
-  // --- PARSE REQUEST ---
-  let body;
-  try {
-    body = req.body || {};
-  } catch (error) {
-    return { statusCode: 400, body: JSON.stringify({ error: "Invalid JSON" }) };
-  }
-
+  const body = req.body || {};
   const { text, name, year, topic } = body;
-  
-  // Aggressive API Key Cleanup
-  const apiKey = (process.env.GEMINI_API_KEY || "").replace(/['"\s]/g, '').trim();
+
+  if (!text || typeof text !== "string") {
+    return res.status(400).json({ error: "Missing or invalid student text." });
+  }
+
+  const apiKey = (process.env.GEMINI_API_KEY || "").replace(/['"\s]/g, "").trim();
 
   if (!apiKey || apiKey.length < 20) {
-    console.error("[ERROR] API Key is missing or invalid in Netlify settings.");
-    return { 
-      statusCode: 400, 
-      headers: { "Access-Control-Allow-Origin": origin === "No Origin" ? "*" : origin, "Content-Type": "application/json" },
-      body: JSON.stringify({ error: "SERVER CONFIG ERROR: API Key missing in Netlify. Please check Environment Variables." }) 
-    };
+    console.error("[ERROR] API Key is missing or invalid in Vercel settings.");
+    return res.status(500).json({
+      error: "SERVER CONFIG ERROR: API Key missing in Vercel Environment Variables."
+    });
   }
 
   const systemInstruction = `You are an expert Australian NAPLAN narrative marker and experienced English teacher.
@@ -114,54 +108,50 @@ Do not include explanation outside the JSON.
 Do not include trailing commas.
 The totalScore must equal the sum of all criterion scores.`;
 
-  const userPrompt = `Student: ${name || 'Candidate'}\nYear: ${year || 'Unknown'}\nTopic: ${topic || 'Narrative'}\nText:\n${text}`;
+  const userPrompt = `Student: ${name || "Candidate"}
+Year: ${year || "Unknown"}
+Topic: ${topic || "Narrative"}
+Text:
+${text}`;
 
-  // Use v1beta for gemini-2.0-flash as it is the most robust endpoint for this model
   const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
 
   try {
-    console.log(`[API] Calling Gemini 2.0 Flash...`);
+    console.log("[API] Calling Gemini 2.5 Flash...");
+
     const response = await fetch(url, {
-      method: 'POST',
-      headers: { 
-        'Content-Type': 'application/json'
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({
         contents: [{ parts: [{ text: userPrompt }] }],
         systemInstruction: { parts: [{ text: systemInstruction }] },
-        generationConfig: { responseMimeType: "application/json", temperature: 0.2 }
+        generationConfig: {
+          responseMimeType: "application/json",
+          temperature: 0.2
+        }
       })
     });
 
     const data = await response.json();
-    
+
     if (!response.ok) {
-        console.error(`[GOOGLE ERROR] Status: ${response.status}, Message: ${data.error?.message}`);
-        throw new Error(`Google API Error: ${data.error?.message || response.statusText}`);
+      console.error(`[GOOGLE ERROR] Status: ${response.status}, Message: ${data.error?.message}`);
+      throw new Error(`Google API Error: ${data.error?.message || response.statusText}`);
     }
 
     const resultText = data.candidates?.[0]?.content?.parts?.[0]?.text;
-    if (!resultText) throw new Error("No response from AI");
+    if (!resultText) {
+      throw new Error("No response from AI");
+    }
 
     console.log("[SUCCESS] Report generated successfully.");
-    return {
-      statusCode: 200,
-      headers: { 
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": origin === "No Origin" ? "*" : origin
-      },
-      body: resultText
-    };
 
+    res.setHeader("Content-Type", "application/json");
+    return res.status(200).send(resultText);
   } catch (error) {
     console.error("[RUNTIME ERROR]", error.message);
-    return {
-      statusCode: 500,
-      headers: { 
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": origin === "No Origin" ? "*" : origin
-      },
-      body: JSON.stringify({ error: error.message })
-    };
+    return res.status(500).json({ error: error.message });
   }
-};
+}
