@@ -129,6 +129,12 @@ audio-close{position:absolute;right:10px;top:-29px;width:28px;height:28px;color:
   background: transparent !important;
   padding: 0 !important;
 }
+/* This forces ALL stop words to be gray in Stop Mode, overriding everything else */
+.analysis-text.stop-only .hl.hl-stop {
+    background: #d7d7d7 !important;
+    padding: 1px 2px !important;
+    color: #3f4653 !important;
+}
 
 /* Report Overlay Styling */
 .report-overlay { position:absolute; inset:0; background:rgba(255,255,255,0.92); z-index:30; display:none; align-items:center; justify-content:center; padding:20px; backdrop-filter:blur(4px); }
