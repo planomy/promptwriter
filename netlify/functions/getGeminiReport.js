@@ -74,7 +74,7 @@ Return ONLY valid JSON in this exact shape:
   const userPrompt = `Student: ${name || 'Candidate'}\nYear: ${year || 'Unknown'}\nTopic: ${topic || 'Narrative'}\nText:\n${text}`;
 
   // Use v1beta for gemini-2.0-flash as it is the most robust endpoint for this model
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
 
   try {
     console.log(`[API] Calling Gemini 2.0 Flash...`);
